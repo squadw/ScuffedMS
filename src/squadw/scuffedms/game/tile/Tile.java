@@ -1,5 +1,10 @@
 package squadw.scuffedms.game.tile;
 
+import squadw.scuffedms.game.button.GButton;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class Tile {
 
     //State of the tile 0 = closed, 1 = opened, 2 = marked
@@ -8,9 +13,30 @@ public class Tile {
     protected final int MARKED = 2;
     private int tileState;
     private int numBombs;
+    private boolean isMine;
+    private GButton button = new GButton();
 
     public Tile() {
         this.tileState = 0;
+        this.isMine = false;
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() >= 2) setMarked();
+                else if (e.getClickCount() == 1) setOpened();
+            }
+        });
+    }
+
+
+
+    public Tile(boolean isMine) {
+        this();
+        this.isMine = isMine;
+    }
+
+    public boolean isMine() {
+        return isMine;
     }
 
     public void setClosed() {
@@ -27,5 +53,10 @@ public class Tile {
 
     private void setTileState(int s) {
         this.tileState = s;
+    }
+
+    @Override
+    public String toString() {
+        return ".";
     }
 }
