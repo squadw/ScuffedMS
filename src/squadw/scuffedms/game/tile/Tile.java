@@ -2,6 +2,7 @@ package squadw.scuffedms.game.tile;
 
 import squadw.scuffedms.game.button.GButton;
 
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -17,13 +18,15 @@ public class Tile {
     private GButton button = new GButton();
 
     public Tile() {
-        this.tileState = 0;
         this.isMine = false;
+        setClosed();
+        setImage();
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() >= 2) setMarked();
                 else if (e.getClickCount() == 1) setOpened();
+                setImage();
             }
         });
     }
@@ -33,6 +36,18 @@ public class Tile {
     public Tile(boolean isMine) {
         this();
         this.isMine = isMine;
+        setImage();
+    }
+
+    public void setImage() {
+        button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
+        if (isMine)
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/bomb.jpg")));
+        else if (tileState == OPENED)
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
+        else if (tileState == MARKED) {
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
+        }
     }
 
     public GButton getButton() {
