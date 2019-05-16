@@ -4,20 +4,18 @@ import squadw.scuffedms.game.tile.Tile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class Minesweeper extends JFrame {
 
     private Board board;
+    private int wh;
 
     public Minesweeper() {
-        board = new Board(16);
-        setLayout(new GridBagLayout());
+        board = new Board(9);
+        wh = board.getSize() * 50;
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
+        setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
         initFrame();
     }
 
@@ -41,15 +39,15 @@ public class Minesweeper extends JFrame {
     }
 
     private void initFrame() {
-        setSize(800, 800);
+        setSize(wh, wh);
         setTitle("Scuffed Minesweeper");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         initButtons();
     }
 
-    public void paint(Graphics g) {
+    /*public void paint(Graphics g) {
         g.setColor(Color.lightGray);
-        g.fillRect(1,1,800,800);
-    }
+        g.fillRect(1,1,wh,wh);
+    }*/
 }
