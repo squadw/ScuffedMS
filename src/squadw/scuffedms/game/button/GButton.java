@@ -13,8 +13,8 @@ public class GButton extends JButton {
     }
 
     private void setCons() {
-        c.ipadx = 10;
-        c.ipady = 30;
+        c.ipadx = 9;
+        c.ipady = 36;
     }
 
     public void addButtonToFrame(JFrame frame) {

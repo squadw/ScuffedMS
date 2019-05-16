@@ -2,6 +2,9 @@ package squadw.scuffedms.game.tile;
 
 import squadw.scuffedms.game.button.GButton;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -17,13 +20,14 @@ public class Tile {
     private GButton button = new GButton();
 
     public Tile() {
-        this.tileState = 0;
         this.isMine = false;
+        setClosed();
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() >= 2) setMarked();
                 else if (e.getClickCount() == 1) setOpened();
+                System.out.println(tileState);
             }
         });
     }
@@ -33,6 +37,15 @@ public class Tile {
     public Tile(boolean isMine) {
         this();
         this.isMine = isMine;
+    }
+
+    public void setImage() {
+        try {
+            Image img = ImageIO.read(getClass().getResource("/resources/water.bmp"));
+            button.setIcon(new ImageIcon(img));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
 
     public GButton getButton() {
