@@ -17,7 +17,7 @@ public class GButton extends JButton {
         c.ipady = 30;
     }
 
-    private GridBagConstraints getCons() {
-        return c;
+    public void addButtonToFrame(JFrame frame) {
+        frame.add(this, c);
     }
 }

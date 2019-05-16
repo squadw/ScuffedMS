@@ -35,6 +35,10 @@ public class Tile {
         this.isMine = isMine;
     }
 
+    public GButton getButton() {
+        return button;
+    }
+
     public boolean isMine() {
         return isMine;
     }

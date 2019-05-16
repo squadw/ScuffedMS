@@ -29,6 +29,10 @@ public class Board {
         return board;
     }
 
+    public void setBoard(Tile[][] board) {
+        this.board = board;
+    }
+
     private void initBoard() {
         Random r = new Random();
         int n = (size * size) / 8;
