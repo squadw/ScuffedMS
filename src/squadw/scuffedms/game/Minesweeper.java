@@ -12,7 +12,7 @@ public class Minesweeper extends JFrame {
 
     public Minesweeper() {
         board = new Board(9);
-        wh = board.getSize() * 50;
+        wh = board.getSize() * 54;
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));

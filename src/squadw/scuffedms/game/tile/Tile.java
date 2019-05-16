@@ -2,9 +2,7 @@ package squadw.scuffedms.game.tile;
 
 import squadw.scuffedms.game.button.GButton;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -22,12 +20,13 @@ public class Tile {
     public Tile() {
         this.isMine = false;
         setClosed();
+        setImage();
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() >= 2) setMarked();
                 else if (e.getClickCount() == 1) setOpened();
-                System.out.println(tileState);
+                setImage();
             }
         });
     }
@@ -37,14 +36,17 @@ public class Tile {
     public Tile(boolean isMine) {
         this();
         this.isMine = isMine;
+        setImage();
     }
 
     public void setImage() {
-        try {
-            Image img = ImageIO.read(getClass().getResource("/resources/water.bmp"));
-            button.setIcon(new ImageIcon(img));
-        } catch (Exception ex) {
-            System.out.println(ex);
+        button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
+        if (isMine)
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/bomb.jpg")));
+        else if (tileState == OPENED)
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
+        else if (tileState == MARKED) {
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
         }
     }
 

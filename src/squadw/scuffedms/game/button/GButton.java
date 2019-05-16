@@ -10,6 +10,9 @@ public class GButton extends JButton {
     public GButton() {
         super();
         setCons();
+        setBorderPainted(false);
+        setFocusPainted(false);
+        setContentAreaFilled(false);
     }
 
     private void setCons() {
