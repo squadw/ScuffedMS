@@ -39,7 +39,7 @@ public class Board {
 
     private void initBoard() {
         Random r = new Random();
-        int n = (size * size) * diff / 8;
+        int n = (size * size) * (diff * 2 - 1) / 8;
         int x;
         int y;
 

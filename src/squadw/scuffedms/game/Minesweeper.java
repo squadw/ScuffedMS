@@ -10,11 +10,13 @@ import java.io.IOException;
 public class Minesweeper extends JFrame {
 
     private Board board;
-    private int wh;
+    private int w;
+    private int h;
 
     public Minesweeper() {
-        board = new Board(16);
-        wh = board.getSize() * 40;
+        board = new Board(9,3);
+        w = board.getSize() * 40;
+        h = board.getSize() * 40 + 20;
         initFrame();
     }
 
@@ -38,7 +40,7 @@ public class Minesweeper extends JFrame {
     }
 
     private void initFrame() {
-        setSize(wh, wh + 10);
+        setSize(w, h);
         setFocusable(true);
         setResizable(false);
         setFocusTraversalKeysEnabled(false);

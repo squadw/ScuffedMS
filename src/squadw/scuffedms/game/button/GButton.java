@@ -16,7 +16,7 @@ public class GButton extends JButton {
     }
 
     private void setCons() {
-        c.ipadx = 9;
+        c.ipadx = 6;
         c.ipady = 36;
     }
 
