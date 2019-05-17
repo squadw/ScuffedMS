@@ -33,11 +33,15 @@ public class Tile {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (pressed) {
-                    if (SwingUtilities.isRightMouseButton(e)) setMarked();
-                    else setOpened();
+                    if (tileState == MARKED && SwingUtilities.isRightMouseButton(e)) {
+                        setClosed();
+                    } else {
+                        if (SwingUtilities.isRightMouseButton(e)) setMarked();
+                        else setOpened();
+                    }
                     setImage();
+                    pressed = false;
                 }
-                pressed = false;
             }
 
             @Override
@@ -58,6 +62,8 @@ public class Tile {
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
         else if (tileState == MARKED) {
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
+        } else if (tileState == CLOSED) {
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
         }
     }
 
