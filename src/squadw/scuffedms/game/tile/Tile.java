@@ -36,7 +36,7 @@ public class Tile {
                     if (tileState == MARKED && SwingUtilities.isRightMouseButton(e)) {
                         setClosed();
                     } else {
-                        if (SwingUtilities.isRightMouseButton(e)) setMarked();
+                        if (SwingUtilities.isRightMouseButton(e) && getTileState() != OPENED) setMarked();
                         else setOpened();
                     }
                     setImage();

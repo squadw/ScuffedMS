@@ -29,7 +29,7 @@ public class Mine extends Tile {
                     if (getTileState() == MARKED && SwingUtilities.isRightMouseButton(e)) {
                         setClosed();
                     } else {
-                        if (SwingUtilities.isRightMouseButton(e)) setMarked();
+                        if (SwingUtilities.isRightMouseButton(e) && getTileState() != OPENED) setMarked();
                         else explode();
                     }
                     setImage();
