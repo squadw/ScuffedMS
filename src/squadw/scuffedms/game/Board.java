@@ -7,16 +7,20 @@ import java.util.Random;
 
 public class Board {
     private int size;
+    private int diff;
     private Tile[][] board;
 
     public Board() {
-        size = 9;
-        board = new Tile[size][size];
-        initBoard();
+        this(9);
     }
 
     public Board(int size) {
+        this(size, 1);
+    }
+
+    public Board(int size, int diff) {
         this.size = size;
+        this.diff = diff;
         board = new Tile[this.size][this.size];
         initBoard();
     }
@@ -35,7 +39,7 @@ public class Board {
 
     private void initBoard() {
         Random r = new Random();
-        int n = (size * size) / 8;
+        int n = (size * size) * diff / 8;
         int x;
         int y;
 
@@ -49,7 +53,7 @@ public class Board {
             x = r.nextInt(size);
             y = r.nextInt(size);
 
-            while(!board[x][y].isMine()) {
+            while(!(board[x][y] instanceof Mine)) {
                 x = r.nextInt(size);
                 y = r.nextInt(size);
                 board[x][y] = new Mine();

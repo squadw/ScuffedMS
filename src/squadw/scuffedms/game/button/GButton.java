@@ -10,11 +10,14 @@ public class GButton extends JButton {
     public GButton() {
         super();
         setCons();
+        setBorderPainted(false);
+        setFocusPainted(false);
+        setContentAreaFilled(false);
     }
 
     private void setCons() {
-        c.ipadx = 10;
-        c.ipady = 30;
+        c.ipadx = 9;
+        c.ipady = 36;
     }
 
     public void addButtonToFrame(JFrame frame) {

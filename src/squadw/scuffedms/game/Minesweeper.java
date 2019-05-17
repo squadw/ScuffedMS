@@ -2,8 +2,10 @@ package squadw.scuffedms.game;
 
 import squadw.scuffedms.game.tile.Tile;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class Minesweeper extends JFrame {
 
@@ -11,11 +13,8 @@ public class Minesweeper extends JFrame {
     private int wh;
 
     public Minesweeper() {
-        board = new Board(9);
-        wh = board.getSize() * 50;
-        setFocusable(true);
-        setFocusTraversalKeysEnabled(false);
-        setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
+        board = new Board(16);
+        wh = board.getSize() * 40;
         initFrame();
     }
 
@@ -39,15 +38,16 @@ public class Minesweeper extends JFrame {
     }
 
     private void initFrame() {
-        setSize(wh, wh);
+        setSize(wh, wh + 10);
+        setFocusable(true);
+        setResizable(false);
+        setFocusTraversalKeysEnabled(false);
         setTitle("Scuffed Minesweeper");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
+        setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
+        try { setIconImage(ImageIO.read(getClass().getResource("/squadw/scuffedms/resources/images/flag.png"))); }
+        catch(IOException e) { System.out.println(e); }
+
         initButtons();
     }
-
-    /*public void paint(Graphics g) {
-        g.setColor(Color.lightGray);
-        g.fillRect(1,1,wh,wh);
-    }*/
 }
