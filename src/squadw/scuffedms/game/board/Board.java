@@ -10,14 +10,6 @@ public class Board {
     private int diff;
     private Tile[][] board;
 
-    public Board() {
-        this(9);
-    }
-
-    public Board(int size) {
-        this(size, 1);
-    }
-
     public Board(int size, int diff) {
         this.size = size;
         this.diff = diff;
@@ -31,10 +23,6 @@ public class Board {
 
     public Tile[][] getBoard() {
         return board;
-    }
-
-    public void setBoard(Tile[][] board) {
-        this.board = board;
     }
 
     private void initBoard() {
@@ -53,11 +41,11 @@ public class Board {
             x = r.nextInt(size);
             y = r.nextInt(size);
 
-            while(!(board[x][y] instanceof Mine)) {
+            do {
                 x = r.nextInt(size);
                 y = r.nextInt(size);
                 board[x][y] = new Mine();
-            }
+            } while (!(board[x][y] instanceof Mine));
         }
     }
 }

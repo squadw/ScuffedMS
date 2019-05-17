@@ -11,14 +11,11 @@ import java.io.IOException;
 
 public class Game extends JFrame {
 
-    Minesweeper game = new Minesweeper();
-    JPanel panel = new JPanel();
+    Minesweeper game;
 
     public Game() {
         initFrame();
-        initPanel();
-        initScreen();
-        setContentPane(panel);
+        startScreen();
         setVisible(true);
     }
 
@@ -26,6 +23,7 @@ public class Game extends JFrame {
         setSize(400, 500);
         setFocusable(true);
         setResizable(false);
+        setLocationRelativeTo(null);
         setFocusTraversalKeysEnabled(false);
         setTitle("Scuffed Minesweeper");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -33,12 +31,12 @@ public class Game extends JFrame {
         catch(IOException e) { System.out.println(e); }
     }
 
-    private void initPanel() {
-        panel.setLayout(new GridBagLayout());
-    }
-
-    private void initScreen() {
+    private void startScreen() {
+        JPanel panel = new JPanel();
         JButton p = new JButton("Play");
+
+        panel.setLayout(new GridBagLayout());
+        setContentPane(panel);
 
         p.setAlignmentX(Component.CENTER_ALIGNMENT);
         p.setAlignmentY(Component.CENTER_ALIGNMENT);
@@ -48,6 +46,103 @@ public class Game extends JFrame {
         p.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                panel.setVisible(false);
+                sizeScreen();
+            }
+        });
+    }
+
+    private void sizeScreen() {
+        JPanel panel = new JPanel();
+        GridBagConstraints c = new GridBagConstraints();
+        JButton s = new JButton("Small");
+        JButton m = new JButton("Medium");
+        JButton l = new JButton("Large");
+
+        panel.setLayout(new GridBagLayout());
+
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.VERTICAL;
+        c.insets = new Insets(5,0,5,0);
+
+        s.setPreferredSize(new Dimension(150,50));
+        m.setPreferredSize(new Dimension(150,50));
+        l.setPreferredSize(new Dimension(150,50));
+
+        panel.add(s, c);
+        panel.add(m, c);
+        panel.add(l, c);
+
+        setContentPane(panel);
+
+        s.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                panel.setVisible(false);
+                difficultyScreen(8);
+            }
+        });
+        m.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                panel.setVisible(false);
+                difficultyScreen(16);
+            }
+        });
+        l.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                panel.setVisible(false);
+                difficultyScreen(24);
+            }
+        });
+    }
+
+    private void difficultyScreen(int size) {
+        JPanel panel = new JPanel();
+        GridBagConstraints c = new GridBagConstraints();
+        JButton e = new JButton("Easy");
+        JButton n = new JButton("Normal");
+        JButton h = new JButton("Hard");
+
+        panel.setLayout(new GridBagLayout());
+
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.VERTICAL;
+        c.insets = new Insets(5,0,5,0);
+
+        e.setPreferredSize(new Dimension(150,50));
+        n.setPreferredSize(new Dimension(150,50));
+        h.setPreferredSize(new Dimension(150,50));
+
+        panel.add(e, c);
+        panel.add(n, c);
+        panel.add(h, c);
+
+        setContentPane(panel);
+
+        e.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                game = new Minesweeper(size, 1);
+                setVisible(false);
+                game.setVisible(true);
+            }
+        });
+        n.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                game = new Minesweeper(size, 2);
+                setVisible(false);
+                game.setVisible(true);
+            }
+        });
+        h.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                game = new Minesweeper(size, 3);
                 setVisible(false);
                 game.setVisible(true);
             }
