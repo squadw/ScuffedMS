@@ -53,7 +53,7 @@ public class Board {
             x = r.nextInt(size);
             y = r.nextInt(size);
 
-            while(!board[x][y].isMine()) {
+            while(!(board[x][y] instanceof Mine)) {
                 x = r.nextInt(size);
                 y = r.nextInt(size);
                 board[x][y] = new Mine();

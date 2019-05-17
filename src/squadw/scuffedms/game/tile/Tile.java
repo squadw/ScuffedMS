@@ -9,32 +9,29 @@ import java.awt.event.MouseEvent;
 public class Tile {
 
     //State of the tile 0 = closed, 1 = opened, 2 = marked
-    protected final int CLOSED = 0;
-    protected final int OPENED = 1;
-    protected final int MARKED = 2;
+    public final int CLOSED = 0;
+    public final int OPENED = 1;
+    public final int MARKED = 2;
     private int tileState;
-    private int numBombs;
-    private boolean isMine;
     private GButton button = new GButton();
 
     public Tile() {
-        this.isMine = false;
         setClosed();
         setImage();
+        mouseListener();
+    }
+
+    protected void mouseListener() {
         button.addMouseListener(new MouseAdapter() {
             boolean pressed;
 
             @Override
             public void mousePressed(MouseEvent e) {
-                button.getModel().setArmed(true);
-                button.getModel().setPressed(true);
                 pressed = true;
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                button.getModel().setArmed(false);
-                button.getModel().setPressed(false);
                 if (pressed) {
                     if (SwingUtilities.isRightMouseButton(e)) setMarked();
                     else setOpened();
@@ -55,19 +52,9 @@ public class Tile {
         });
     }
 
-
-
-    public Tile(boolean isMine) {
-        this();
-        this.isMine = isMine;
-        setImage();
-    }
-
     public void setImage() {
         button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
-        if (isMine)
-            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/bomb.png")));
-        else if (tileState == OPENED)
+        if (tileState == OPENED)
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
         else if (tileState == MARKED) {
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
@@ -76,10 +63,6 @@ public class Tile {
 
     public GButton getButton() {
         return button;
-    }
-
-    public boolean isMine() {
-        return isMine;
     }
 
     public void setClosed() {
@@ -96,6 +79,10 @@ public class Tile {
 
     private void setTileState(int s) {
         this.tileState = s;
+    }
+
+    public int getTileState() {
+        return tileState;
     }
 
     @Override
