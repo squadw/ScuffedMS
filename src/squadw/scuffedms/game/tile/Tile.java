@@ -22,11 +22,35 @@ public class Tile {
         setClosed();
         setImage();
         button.addMouseListener(new MouseAdapter() {
+            boolean pressed;
+
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() >= 2) setMarked();
-                else if (e.getClickCount() == 1) setOpened();
-                setImage();
+            public void mousePressed(MouseEvent e) {
+                button.getModel().setArmed(true);
+                button.getModel().setPressed(true);
+                pressed = true;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                button.getModel().setArmed(false);
+                button.getModel().setPressed(false);
+                if (pressed) {
+                    if (SwingUtilities.isRightMouseButton(e)) setMarked();
+                    else setOpened();
+                    setImage();
+                }
+                pressed = false;
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                pressed = false;
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                pressed = true;
             }
         });
     }
@@ -42,7 +66,7 @@ public class Tile {
     public void setImage() {
         button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
         if (isMine)
-            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/bomb.jpg")));
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/bomb.png")));
         else if (tileState == OPENED)
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
         else if (tileState == MARKED) {
