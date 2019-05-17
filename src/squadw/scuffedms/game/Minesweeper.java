@@ -1,5 +1,6 @@
 package squadw.scuffedms.game;
 
+import squadw.scuffedms.game.board.Board;
 import squadw.scuffedms.game.tile.Tile;
 
 import javax.imageio.ImageIO;
@@ -14,7 +15,7 @@ public class Minesweeper extends JFrame {
     private int h;
 
     public Minesweeper() {
-        board = new Board(9,3);
+        board = new Board(16,2);
         w = board.getSize() * 40;
         h = board.getSize() * 40 + 20;
         initFrame();

@@ -1,4 +1,4 @@
-package squadw.scuffedms.game;
+package squadw.scuffedms.game.board;
 
 import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
