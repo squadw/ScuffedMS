@@ -26,11 +26,16 @@ public class Mine extends Tile {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (pressed) {
-                    if (SwingUtilities.isRightMouseButton(e)) setMarked();
-                    else explode();
+                    if (getTileState() == MARKED && SwingUtilities.isRightMouseButton(e)) {
+                        setClosed();
+                    } else {
+                        if (SwingUtilities.isRightMouseButton(e)) setMarked();
+                        else explode();
+                    }
                     setImage();
+                    pressed = false;
                 }
-                pressed = false;
+
             }
 
             @Override
@@ -47,6 +52,8 @@ public class Mine extends Tile {
 
     public void explode() {
         exploded = true;
+//        setImage(); - set image before ending the game so the bomb img still gets rendered and put on the board
+//        do something here to end the game probably just run method that ends game or switches to a new jframe with a "You lost! Play again?" screen
     }
 
     @Override
