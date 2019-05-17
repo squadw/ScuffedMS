@@ -33,12 +33,9 @@ public class Tile {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (pressed) {
-                    if (tileState == MARKED && SwingUtilities.isRightMouseButton(e)) {
-                        setClosed();
-                    } else {
-                        if (SwingUtilities.isRightMouseButton(e) && getTileState() != OPENED) setMarked();
-                        else setOpened();
-                    }
+                    if (tileState == MARKED && SwingUtilities.isRightMouseButton(e)) setClosed();
+                    else if (SwingUtilities.isRightMouseButton(e) && getTileState() != OPENED) setMarked();
+                    else setOpened();
                     setImage();
                     pressed = false;
                 }

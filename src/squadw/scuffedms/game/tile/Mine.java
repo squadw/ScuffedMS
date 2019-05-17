@@ -26,12 +26,10 @@ public class Mine extends Tile {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (pressed) {
-                    if (getTileState() == MARKED && SwingUtilities.isRightMouseButton(e)) {
-                        setClosed();
-                    } else {
-                        if (SwingUtilities.isRightMouseButton(e) && getTileState() != OPENED) setMarked();
-                        else explode();
-                    }
+                    if (getTileState() == MARKED && SwingUtilities.isRightMouseButton(e)) setClosed();
+                    else if (SwingUtilities.isRightMouseButton(e) && getTileState() != OPENED) setMarked();
+                    else explode();
+
                     setImage();
                     pressed = false;
                 }
