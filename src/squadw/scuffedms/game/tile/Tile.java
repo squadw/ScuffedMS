@@ -13,15 +13,16 @@ public class Tile {
     public static final int OPENED = 1;
     public static final int MARKED = 2;
     private int tileState;
+    private int numBombs;
     private GButton button = new GButton();
 
     public Tile() {
         setClosed();
         setImage();
-        mouseListener();
+        //mouseListener();
     }
 
-    private void mouseListener() {
+    /*private void mouseListener() {
         button.addMouseListener(new MouseAdapter() {
             boolean pressed;
 
@@ -51,6 +52,14 @@ public class Tile {
                 pressed = true;
             }
         });
+    }*/
+
+    public void setNumBombs(int numBombs) {
+        this.numBombs = numBombs;
+    }
+
+    public int getNumBombs() {
+        return numBombs;
     }
 
     public void setImage() {
@@ -59,6 +68,11 @@ public class Tile {
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
         else if (tileState == MARKED)
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
+        for (int i = 0; i < 9; i++) {
+            if (tileState == OPENED && numBombs != 0) {
+                button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/" + numBombs + ".png")));
+            }
+        }
     }
 
     public GButton getButton() {
