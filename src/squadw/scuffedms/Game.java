@@ -19,6 +19,15 @@ public class Game extends JFrame {
         setVisible(true);
     }
 
+    public Game(int s, int d) {
+        game = new Minesweeper(s, d);
+        game.setVisible(true);
+    }
+
+    public Game(int s) {
+        this(s, 2);
+    }
+
     private void initFrame() {
         setSize(400, 500);
         setFocusable(true);
