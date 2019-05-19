@@ -1,6 +1,8 @@
 package squadw.scuffedms.game;
 
 import squadw.scuffedms.game.board.Board;
+import squadw.scuffedms.game.tile.Mine;
+import squadw.scuffedms.game.tile.Tile;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,7 +21,21 @@ public class Minesweeper extends JFrame {
         h = board.getSize() * 40 + 20;
         initFrame();
         initButtons();
+        setVisible(true);
+        printBoard();
     }
+
+    public void printBoard() {
+        Tile[][] temp = board.getBoard();
+
+        for (int i = 0; i < board.getSize(); i++) {
+            System.out.println();
+            for (int j = 0; j < board.getSize(); j++) {
+                System.out.print(temp[i][j] + " ");
+            }
+        }
+    }
+
 
     private void initButtons() {
         for (int i = 0; i < board.getSize(); i++) {

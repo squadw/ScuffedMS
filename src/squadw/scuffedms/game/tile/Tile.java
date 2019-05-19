@@ -18,7 +18,6 @@ public class Tile {
 
     public Tile() {
         setClosed();
-        setImage();
         //mouseListener();
     }
 
@@ -68,10 +67,8 @@ public class Tile {
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
         else if (tileState == MARKED)
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
-        for (int i = 0; i < 9; i++) {
-            if (tileState == OPENED && numBombs != 0) {
-                button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/" + numBombs + ".png")));
-            }
+        if (tileState == OPENED && numBombs != 0) {
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/" + numBombs + ".png")));
         }
     }
 
@@ -81,14 +78,17 @@ public class Tile {
 
     public void setClosed() {
         setTileState(CLOSED);
+        setImage();
     }
 
     public void setOpened() {
         setTileState(OPENED);
+        setImage();
     }
 
     public void setMarked() {
         setTileState(MARKED);
+        setImage();
     }
 
     private void setTileState(int s) {

@@ -1,5 +1,6 @@
 package squadw.scuffedms.game.board;
 
+import squadw.scuffedms.Main;
 import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
@@ -11,6 +12,8 @@ import java.util.Random;
 public class Board {
     private int size;
     private int diff;
+    private int numBombs;
+    private int numTiles;
     private Tile[][] board;
 
     public Board(int size, int diff) {
@@ -27,6 +30,10 @@ public class Board {
 
     public Tile[][] getBoard() {
         return board;
+    }
+
+    public int getNumBombs() {
+        return numBombs;
     }
 
     private void checkForBombs(int x, int y) {
@@ -49,9 +56,9 @@ public class Board {
     }
 
     private void tileMouseListener() {
-        for (Tile[] t1: board)
-            for (Tile t2 : t1) {
-                t2.getButton().addMouseListener(new MouseAdapter() {
+        for (Tile[] b: board)
+            for (Tile t : b) {
+                t.getButton().addMouseListener(new MouseAdapter() {
                     boolean pressed;
 
                     @Override
@@ -62,10 +69,10 @@ public class Board {
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         if (pressed) {
-                            if (t2.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t2.setClosed();
-                            else if (SwingUtilities.isRightMouseButton(e) && t2.getTileState() != Tile.OPENED) t2.setMarked();
-                            else t2.setOpened();
-                            t2.setImage();
+                            if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t.setClosed();
+                            else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
+                            else t.setOpened();
+                            checkForGameEnd();
                             pressed = false;
                         }
                     }
@@ -81,6 +88,24 @@ public class Board {
                     }
                 });
             }
+    }
+
+    private void checkForGameEnd() {
+        int bombsFlagged = 0;
+        int markedTiles = 0;
+        boolean gameOver = false;
+
+        for (Tile[] b : board) {
+            for (Tile t : b) {
+                if (t instanceof Mine && ((Mine) t).isExploded()) gameOver = true;
+                if (t instanceof Mine && t.getTileState() == Tile.MARKED) bombsFlagged++;
+                if (!(t instanceof Mine) && t.getTileState() == Tile.MARKED) markedTiles++;
+                t.setImage();
+            }
+        }
+
+        if (bombsFlagged == numBombs && markedTiles == 0) Main.endGame(true);
+        else if (gameOver) Main.endGame(false);
     }
 
     private void initBoard() {
@@ -106,6 +131,10 @@ public class Board {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 checkForBombs(i, j);
+                if (board[i][j] instanceof Mine) {
+                    numBombs++;
+                }
+                else numTiles++;
             }
         }
     }
