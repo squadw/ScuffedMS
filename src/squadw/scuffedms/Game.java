@@ -11,12 +11,21 @@ import java.io.IOException;
 
 public class Game extends JFrame {
 
-    Minesweeper game;
+    private Minesweeper game;
 
     public Game() {
         initFrame();
         startScreen();
         setVisible(true);
+    }
+
+    public Game(int s, int d) {
+        game = new Minesweeper(s, d);
+        game.setVisible(true);
+    }
+
+    public Game(int s) {
+        this(s, 2);
     }
 
     private void initFrame() {
@@ -126,25 +135,22 @@ public class Game extends JFrame {
         e.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                game = new Minesweeper(size, 1);
                 setVisible(false);
-                game.setVisible(true);
+                game = new Minesweeper(size, 1);
             }
         });
         n.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                game = new Minesweeper(size, 2);
                 setVisible(false);
-                game.setVisible(true);
+                game = new Minesweeper(size, 2);
             }
         });
         h.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                game = new Minesweeper(size, 3);
                 setVisible(false);
-                game.setVisible(true);
+                game = new Minesweeper(size, 3);
             }
         });
     }

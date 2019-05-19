@@ -4,13 +4,16 @@ import javax.swing.*;
 
 public class Mine extends Tile {
 
-    boolean exploded;
+    private boolean exploded;
 
     public Mine() {
         super();
         exploded = false;
     }
 
+    public boolean isExploded() {
+        return exploded;
+    }
 
     @Override
     public void setOpened() {
