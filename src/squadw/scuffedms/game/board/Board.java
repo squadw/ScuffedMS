@@ -13,7 +13,7 @@ public class Board {
     private int size;
     private int diff;
     private int numBombs;
-    private int numTiles;
+    private int firstClick;
     private Tile[][] board;
 
     public Board(int size, int diff) {
@@ -30,10 +30,6 @@ public class Board {
 
     public Tile[][] getBoard() {
         return board;
-    }
-
-    public int getNumBombs() {
-        return numBombs;
     }
 
     private void checkForBombs(int x, int y) {
@@ -73,6 +69,7 @@ public class Board {
                             else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
                             else t.setOpened();
                             checkForGameEnd();
+                            firstClick++;
                             pressed = false;
                         }
                     }
@@ -131,10 +128,10 @@ public class Board {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 checkForBombs(i, j);
+                board[i][j].setCoords(i, j);
                 if (board[i][j] instanceof Mine) {
                     numBombs++;
                 }
-                else numTiles++;
             }
         }
     }
