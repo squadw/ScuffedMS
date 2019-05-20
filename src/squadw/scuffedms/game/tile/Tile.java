@@ -12,7 +12,18 @@ public class Tile {
     public static final int MARKED = 2;
     private int tileState;
     private int numBombs;
+    private int x;
+    private int y;
     private GButton button = new GButton();
+
+    public void setCoords(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int[] getCoords() {
+        return new int[] {x, y};
+    }
 
     public Tile() {
         setClosed();
