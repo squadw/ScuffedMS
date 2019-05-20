@@ -19,8 +19,6 @@ public class Mine extends Tile {
     public void setOpened() {
         super.setOpened();
         exploded = true;
-        //setImage(); - set image before ending the game so the bomb img still gets rendered and put on the board
-        //do something here to end the game probably just run method that ends game or switches to a new jframe with a "You lost! Play again?" screen
     }
 
     @Override

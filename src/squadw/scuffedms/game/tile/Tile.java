@@ -3,8 +3,6 @@ package squadw.scuffedms.game.tile;
 import squadw.scuffedms.game.button.GButton;
 
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class Tile {
 
@@ -18,47 +16,10 @@ public class Tile {
 
     public Tile() {
         setClosed();
-        //mouseListener();
     }
-
-    /*private void mouseListener() {
-        button.addMouseListener(new MouseAdapter() {
-            boolean pressed;
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                pressed = true;
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                if (pressed) {
-                    if (tileState == MARKED && SwingUtilities.isRightMouseButton(e)) setClosed();
-                    else if (SwingUtilities.isRightMouseButton(e) && getTileState() != OPENED) setMarked();
-                    else setOpened();
-                    setImage();
-                    pressed = false;
-                }
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                pressed = false;
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                pressed = true;
-            }
-        });
-    }*/
 
     public void setNumBombs(int numBombs) {
         this.numBombs = numBombs;
-    }
-
-    public int getNumBombs() {
-        return numBombs;
     }
 
     public void setImage() {
