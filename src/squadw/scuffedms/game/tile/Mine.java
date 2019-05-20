@@ -23,7 +23,7 @@ public class Mine extends Tile {
 
     @Override
     public void setImage() {
-        getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
+        getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/bomb.png")));
         if (exploded)
             getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/bomb.png")));
         else if (getTileState() == MARKED) {

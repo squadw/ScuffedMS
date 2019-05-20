@@ -16,6 +16,18 @@ public class Tile {
     private int y;
     private GButton button = new GButton();
 
+    public Tile() {
+        setClosed();
+    }
+
+    public void setNumBombs(int numBombs) {
+        this.numBombs = numBombs;
+    }
+
+    public int getNumBombs() {
+        return numBombs;
+    }
+
     public void setCoords(int x, int y) {
         this.x = x;
         this.y = y;
@@ -23,14 +35,6 @@ public class Tile {
 
     public int[] getCoords() {
         return new int[] {x, y};
-    }
-
-    public Tile() {
-        setClosed();
-    }
-
-    public void setNumBombs(int numBombs) {
-        this.numBombs = numBombs;
     }
 
     public void setImage() {
