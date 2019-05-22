@@ -22,7 +22,7 @@ public class Minesweeper extends JFrame {
         initFrame();
         initButtons();
         setVisible(true);
-        printBoard();
+        //printBoard();
     }
 
     public void printBoard() {

@@ -35,14 +35,14 @@ public class Main {
         if (win) {
             Object[] options = {"OK"};
             JOptionPane.showOptionDialog(game, "You marked all the bombs!\nPress OK to quit.",
-                    "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE,
+                    "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE,
                     null, options, options[0]);
             System.exit(9);
         }
         else {
             Object[] options = {"OK"};
             JOptionPane.showOptionDialog(game, "You exploded a bomb!\nPress OK to quit.",
-                    "You Lose", JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE,
+                    "You Lose", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE,
                     null, options, options[0]);
             System.exit(8);
         }
