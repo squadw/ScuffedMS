@@ -136,21 +136,21 @@ public class Game extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 setVisible(false);
-                game = new Minesweeper(size, 1);
+                game = new Minesweeper(size, 2);
             }
         });
         n.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 setVisible(false);
-                game = new Minesweeper(size, 2);
+                game = new Minesweeper(size, 3);
             }
         });
         h.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 setVisible(false);
-                game = new Minesweeper(size, 3);
+                game = new Minesweeper(size, 5);
             }
         });
     }
