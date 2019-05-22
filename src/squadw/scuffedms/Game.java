@@ -89,7 +89,7 @@ public class Game extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panel.setVisible(false);
-                difficultyScreen(8);
+                difficultyScreen(9);
             }
         });
         m.addMouseListener(new MouseAdapter() {
@@ -103,7 +103,7 @@ public class Game extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panel.setVisible(false);
-                difficultyScreen(24);
+                difficultyScreen(25);
             }
         });
     }
