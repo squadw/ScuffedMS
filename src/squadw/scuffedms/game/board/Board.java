@@ -126,6 +126,35 @@ public class Board {
                 board[x - 1][y + 1].setOpened();
                 board[x + 1][y - 1].setOpened();
             }
+            if (x == 0 && y > 0 && y < size-1) {
+                board[x + 1][y].setOpened();
+                board[x][y - 1].setOpened();
+                board[x][y + 1].setOpened();
+                board[x + 1][y + 1].setOpened();
+                board[x + 1][y - 1].setOpened();
+            }
+            if (x == size - 1 && y > 0 && y < size-1) {
+                board[x - 1][y].setOpened();
+                board[x][y - 1].setOpened();
+                board[x][y + 1].setOpened();
+                board[x - 1][y - 1].setOpened();
+                board[x - 1][y + 1].setOpened();
+            }
+            if (y == 0 && x > 0 && x < size-1) {
+                board[x - 1][y].setOpened();
+                board[x + 1][y].setOpened();
+                board[x][y + 1].setOpened();
+                board[x + 1][y + 1].setOpened();
+                board[x - 1][y + 1].setOpened();
+            }
+            if (y == size - 1 && x > 0 && x < size - 1) {
+                board[x - 1][y].setOpened();
+                board[x + 1][y].setOpened();
+                board[x][y - 1].setOpened();
+                board[x - 1][y - 1].setOpened();
+                board[x + 1][y - 1].setOpened();
+            }
+
         }
     }
 
@@ -149,13 +178,13 @@ public class Board {
         if (bombsFlagged == numBombs && markedTiles == 0) Main.endGame(true);
         else if (gameOver) Main.endGame(false);
     }
-
+  
     private void revealAllMines() {
         for (Tile[] b: board)
             for (Tile t : b)
                 if (t instanceof Mine) t.setOpened();
     }
-
+  
     private void initBoard() {
         Random r = new Random();
         int n = (size * size) * diff / 20;
