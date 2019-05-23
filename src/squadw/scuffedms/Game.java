@@ -150,7 +150,7 @@ public class Game extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 setVisible(false);
-                game = new Minesweeper(size, 5);
+                game = new Minesweeper(size, 4);
             }
         });
     }
