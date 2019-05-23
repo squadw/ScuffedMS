@@ -103,7 +103,7 @@ public class Board {
             revealBoard(x-1, y);
             revealBoard(x, y-1);
             revealBoard(x, y+1);
-//            openAround(x, y);
+            //openAround(x, y);
         }
         else return;
 
@@ -154,6 +154,7 @@ public class Board {
                 board[x - 1][y - 1].setOpened();
                 board[x + 1][y - 1].setOpened();
             }
+
         }
     }
 
@@ -164,7 +165,10 @@ public class Board {
 
         for (Tile[] b : board) {
             for (Tile t : b) {
-                if (t instanceof Mine && ((Mine) t).isExploded()) gameOver = true;
+                if (t instanceof Mine && ((Mine) t).isExploded()) {
+                    gameOver = true;
+                    revealAllMines();
+                }
                 if (t instanceof Mine && t.getTileState() == Tile.MARKED) bombsFlagged++;
                 if (!(t instanceof Mine) && t.getTileState() == Tile.MARKED) markedTiles++;
                 t.setImage();
@@ -174,7 +178,13 @@ public class Board {
         if (bombsFlagged == numBombs && markedTiles == 0) Main.endGame(true);
         else if (gameOver) Main.endGame(false);
     }
-    
+  
+    private void revealAllMines() {
+        for (Tile[] b: board)
+            for (Tile t : b)
+                if (t instanceof Mine) t.setOpened();
+    }
+  
     private void initBoard() {
         Random r = new Random();
         int n = (size * size) * diff / 20;
@@ -194,7 +204,7 @@ public class Board {
                 do {
                     x = r.nextInt(size);
                     y = r.nextInt(size);
-                } while ((board[x][y] instanceof Mine));
+                } while(board[x][y] instanceof Mine);
                 board[x][y] = new Mine();
             }
             else {
