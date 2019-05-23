@@ -117,42 +117,39 @@ public class Board {
     private void openAround(int x, int y) {
         if (board[x][y].getTileState() == Tile.OPENED && board[x][y].getNumBombs() == 0) {
             if (x > 0 && x < size-1 && y > 0 && y < size-1) {
-                board[x - 1][y].setOpened();
-                board[x + 1][y].setOpened();
-                board[x][y - 1].setOpened();
-                board[x][y + 1].setOpened();
-                board[x - 1][y - 1].setOpened();
-                board[x + 1][y + 1].setOpened();
-                board[x - 1][y + 1].setOpened();
-                board[x + 1][y - 1].setOpened();
+                for (int i = -1; i < 2; i++) {
+                    for (int j = -1; j < 2; j++) {
+                        board[x+i][y+j].setOpened();
+                    }
+                }
             }
             if (x == 0 && y > 0 && y < size-1) {
-                board[x + 1][y].setOpened();
-                board[x][y - 1].setOpened();
-                board[x][y + 1].setOpened();
-                board[x + 1][y + 1].setOpened();
-                board[x + 1][y - 1].setOpened();
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        board[x+i][y+j].setOpened();
+                    }
+                }
             }
             if (x == size - 1 && y > 0 && y < size-1) {
-                board[x - 1][y].setOpened();
-                board[x][y - 1].setOpened();
-                board[x][y + 1].setOpened();
-                board[x - 1][y - 1].setOpened();
-                board[x - 1][y + 1].setOpened();
+                for (int i = -1; i < 1; i++) {
+                    for (int j = -1; j < 1; j++) {
+                        board[x+i][y+j].setOpened();
+                    }
+                }
             }
             if (y == 0 && x > 0 && x < size-1) {
-                board[x - 1][y].setOpened();
-                board[x + 1][y].setOpened();
-                board[x][y + 1].setOpened();
-                board[x + 1][y + 1].setOpened();
-                board[x - 1][y + 1].setOpened();
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        board[x+i][y+j].setOpened();
+                    }
+                }
             }
             if (y == size - 1 && x > 0 && x < size - 1) {
-                board[x - 1][y].setOpened();
-                board[x + 1][y].setOpened();
-                board[x][y - 1].setOpened();
-                board[x - 1][y - 1].setOpened();
-                board[x + 1][y - 1].setOpened();
+                for (int i = -1; i < 1; i++) {
+                    for (int j = -1; j < 1; j++) {
+                        board[x+i][y+j].setOpened();
+                    }
+                }
             }
 
         }
