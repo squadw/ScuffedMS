@@ -14,7 +14,6 @@ public class Board {
     private int diff;
     private int numBombs;
     private int firstClick;
-    private int[] firstClickCoords;
     private Tile[][] board;
 
     public Board(int size, int diff) {
@@ -68,13 +67,14 @@ public class Board {
                         if (pressed) {
                             firstClick++;
                             if (firstClick == 1) {
-                                firstClickCoords = new int[]{t.getCoords()[1], t.getCoords()[0]};
                                 revealBoard(t.getCoords()[1], t.getCoords()[0]);
                             }
 
                             if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t.setClosed();
                             else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
-                            else t.setOpened();
+                            else if (t.getTileState() != Tile.MARKED) t.setOpened();
+                            if (t.getNumBombs() == 0)
+                                openAround(t.getCoords()[0], t.getCoords()[1]);
                             checkForGameEnd();
 
                             pressed = false;
@@ -96,31 +96,36 @@ public class Board {
 
     private void revealBoard(int x, int y) {
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
-        if (x > firstClickCoords[0] + size/4 || y > firstClickCoords[1] + size/4
-                || x < firstClickCoords[0] - size/4 || y < firstClickCoords[1] - size/4) return;
 
-        if (board[y][x].getNumBombs() < 4 && board[y][x].getTileState() != Tile.OPENED && !(board[y][x] instanceof Mine)) {
+        if (board[y][x].getNumBombs() <= 1 && board[y][x].getTileState() != Tile.OPENED && !(board[y][x] instanceof Mine)) {
             board[y][x].setOpened();
             revealBoard(x+1, y);
             revealBoard(x-1, y);
             revealBoard(x, y-1);
             revealBoard(x, y+1);
-            openAround(x,y);
+            //openAround(x, y);
         }
         else return;
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                openAround(i, j);
+            }
+        }
     }
 
     private void openAround(int x, int y) {
-        if (x > 0 && x < size-1 && y > 0 && y < size-1 &&
-                board[x][y].getTileState() == Tile.OPENED && board[x][y].getNumBombs() == 0) {
-            board[x-1][y].setOpened();
-            board[x+1][y].setOpened();
-            board[x][y-1].setOpened();
-            board[x][y+1].setOpened();
-            board[x-1][y-1].setOpened();
-            board[x+1][y+1].setOpened();
-            board[x-1][y+1].setOpened();
-            board[x+1][y-1].setOpened();
+        if (board[x][y].getTileState() == Tile.OPENED && board[x][y].getNumBombs() == 0) {
+            if (x > 0 && x < size-1 && y > 0 && y < size-1) {
+                board[x - 1][y].setOpened();
+                board[x + 1][y].setOpened();
+                board[x][y - 1].setOpened();
+                board[x][y + 1].setOpened();
+                board[x - 1][y - 1].setOpened();
+                board[x + 1][y + 1].setOpened();
+                board[x - 1][y + 1].setOpened();
+                board[x + 1][y - 1].setOpened();
+            }
         }
     }
 
@@ -131,7 +136,10 @@ public class Board {
 
         for (Tile[] b : board) {
             for (Tile t : b) {
-                if (t instanceof Mine && ((Mine) t).isExploded()) gameOver = true;
+                if (t instanceof Mine && ((Mine) t).isExploded()) {
+                    gameOver = true;
+                    revealAllMines();
+                }
                 if (t instanceof Mine && t.getTileState() == Tile.MARKED) bombsFlagged++;
                 if (!(t instanceof Mine) && t.getTileState() == Tile.MARKED) markedTiles++;
                 t.setImage();
@@ -142,9 +150,15 @@ public class Board {
         else if (gameOver) Main.endGame(false);
     }
 
+    private void revealAllMines() {
+        for (Tile[] b: board)
+            for (Tile t : b)
+                if (t instanceof Mine) t.setOpened();
+    }
+
     private void initBoard() {
         Random r = new Random();
-        int n = (size * size) * diff / 16;
+        int n = (size * size) * diff / 20;
         int x;
         int y;
 
@@ -155,11 +169,18 @@ public class Board {
         }
 
         for (int i = 0; i < n; i++) {
-            do {
-                x = r.nextInt(size);
-                y = r.nextInt(size);
+            x = r.nextInt(size);
+            y = r.nextInt(size);
+            if (board[x][y] instanceof Mine) {
+                do {
+                    x = r.nextInt(size);
+                    y = r.nextInt(size);
+                } while(board[x][y] instanceof Mine);
                 board[x][y] = new Mine();
-            } while (!(board[x][y] instanceof Mine));
+            }
+            else {
+                board[x][y] = new Mine();
+            }
         }
 
         for (int i = 0; i < size; i++) {
