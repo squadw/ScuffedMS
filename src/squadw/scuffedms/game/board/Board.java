@@ -13,7 +13,6 @@ public class Board {
     private int size;
     private int diff;
     private int numBombs;
-    private int firstClick;
     private Tile[][] board;
 
     public Board(int size, int diff) {
@@ -65,10 +64,7 @@ public class Board {
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         if (pressed) {
-                            firstClick++;
-                            if (firstClick == 1) {
-                                revealBoard(t.getCoords()[1], t.getCoords()[0]);
-                            }
+                            revealBoard(t.getCoords()[1], t.getCoords()[0]);
 
                             if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t.setClosed();
                             else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
@@ -97,7 +93,7 @@ public class Board {
     private void revealBoard(int x, int y) {
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
 
-        if (board[y][x].getNumBombs() <= 1 && board[y][x].getTileState() != Tile.OPENED && !(board[y][x] instanceof Mine)) {
+        if (board[y][x].getNumBombs() == 0 && board[y][x].getTileState() != Tile.OPENED && !(board[y][x] instanceof Mine)) {
             board[y][x].setOpened();
             revealBoard(x+1, y);
             revealBoard(x-1, y);
@@ -154,7 +150,22 @@ public class Board {
                 board[x - 1][y - 1].setOpened();
                 board[x + 1][y - 1].setOpened();
             }
+        }
+    }
 
+    private void addNewBomb() {
+        Random r = new Random(45879172);
+        int x = r.nextInt(size);
+        int y = r.nextInt(size);
+        if (board[x][y] instanceof Mine) {
+            do {
+                x = r.nextInt(size);
+                y = r.nextInt(size);
+            } while(board[x][y] instanceof Mine);
+            board[x][y] = new Mine();
+        }
+        else {
+            board[x][y] = new Mine();
         }
     }
 
@@ -186,10 +197,7 @@ public class Board {
     }
   
     private void initBoard() {
-        Random r = new Random();
         int n = (size * size) * diff / 20;
-        int x;
-        int y;
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -197,20 +205,8 @@ public class Board {
             }
         }
 
-        for (int i = 0; i < n; i++) {
-            x = r.nextInt(size);
-            y = r.nextInt(size);
-            if (board[x][y] instanceof Mine) {
-                do {
-                    x = r.nextInt(size);
-                    y = r.nextInt(size);
-                } while(board[x][y] instanceof Mine);
-                board[x][y] = new Mine();
-            }
-            else {
-                board[x][y] = new Mine();
-            }
-        }
+        for (int i = 0; i < n; i++)
+            addNewBomb();
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
