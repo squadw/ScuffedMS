@@ -31,6 +31,10 @@ public class Board {
         return board;
     }
 
+    public int getTotalBombs() {
+        return numBombs;
+    }
+
     private void checkForBombs(int x, int y) {
         int mines = 0;
         int xMax = x+1;
@@ -64,7 +68,7 @@ public class Board {
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         if (pressed) {
-                            revealBoard(t.getCoords()[1], t.getCoords()[0]);
+                            revealBoard(t.getCoords()[0], t.getCoords()[1]);
 
                             if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t.setClosed();
                             else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
@@ -93,8 +97,8 @@ public class Board {
     private void revealBoard(int x, int y) {
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
 
-        if (board[y][x].getNumBombs() == 0 && board[y][x].getTileState() != Tile.OPENED && !(board[y][x] instanceof Mine)) {
-            board[y][x].setOpened();
+        if (board[x][y].getNumBombs() == 0 && board[x][y].getTileState() != Tile.OPENED && !(board[x][y] instanceof Mine)) {
+            board[x][y].setOpened();
             revealBoard(x+1, y);
             revealBoard(x-1, y);
             revealBoard(x, y-1);
@@ -154,7 +158,7 @@ public class Board {
     }
 
     private void addNewBomb() {
-        Random r = new Random(45879172);
+        Random r = new Random();
         int x = r.nextInt(size);
         int y = r.nextInt(size);
         if (board[x][y] instanceof Mine) {
