@@ -13,7 +13,7 @@ public class Board {
     private int size;
     private int diff;
     private int numBombs;
-    private int firstClick;
+    private int numBombsLeft;
     private Tile[][] board;
 
     public Board(int size, int diff) {
@@ -21,7 +21,6 @@ public class Board {
         this.diff = diff;
         board = new Tile[this.size][this.size];
         initBoard();
-        tileMouseListener();
     }
 
     public int getSize() {
@@ -36,7 +35,7 @@ public class Board {
         return numBombs;
     }
 
-    private void checkForBombs(int x, int y) {
+    private void setNumBombs(int x, int y) {
         int mines = 0;
         int xMax = x+1;
         int yMax = y+1;
@@ -55,47 +54,21 @@ public class Board {
         board[x][y].setNumBombs(mines);
     }
 
-    private void tileMouseListener() {
-        for (Tile[] b: board)
+    public int numBombsLeft() {
+        int numMarked = 0;
+
+        for (Tile[] b: board) {
             for (Tile t : b) {
-                t.getButton().addMouseListener(new MouseAdapter() {
-                    boolean pressed;
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        pressed = true;
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        if (pressed) {
-                            revealBoard(t.getCoords()[0], t.getCoords()[1]);
-
-                            if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t.setClosed();
-                            else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
-                            else if (t.getTileState() != Tile.MARKED) t.setOpened();
-                            if (t.getNumBombs() == 0)
-                                openAround(t.getCoords()[0], t.getCoords()[1]);
-                            checkForGameEnd();
-
-                            pressed = false;
-                        }
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        pressed = false;
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                        pressed = true;
-                    }
-                });
+                if (t.getTileState() == Tile.MARKED) {
+                    numMarked++;
+                }
             }
+        }
+        numBombsLeft = numBombs - numMarked;
+        return numBombsLeft;
     }
 
-    private void revealBoard(int x, int y) {
+    public void revealBoard(int x, int y) {
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
 
         if (board[x][y].getNumBombs() == 0 && board[x][y].getTileState() != Tile.OPENED && !(board[x][y] instanceof Mine)) {
@@ -115,42 +88,45 @@ public class Board {
         }
     }
 
-    private void openAround(int x, int y) {
+    public void openAround(int x, int y) {
         if (board[x][y].getTileState() == Tile.OPENED && board[x][y].getNumBombs() == 0) {
             if (x > 0 && x < size-1 && y > 0 && y < size-1) {
-                for (int i = -1; i < 2; i++) {
-                    for (int j = -1; j < 2; j++) {
-                        board[x+i][y+j].setOpened();
-                    }
-                }
+                board[x - 1][y].setOpened();
+                board[x + 1][y].setOpened();
+                board[x][y - 1].setOpened();
+                board[x][y + 1].setOpened();
+                board[x - 1][y - 1].setOpened();
+                board[x + 1][y + 1].setOpened();
+                board[x - 1][y + 1].setOpened();
+                board[x + 1][y - 1].setOpened();
             }
             if (x == 0 && y > 0 && y < size-1) {
-                for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 2; j++) {
-                        board[x+i][y+j].setOpened();
-                    }
-                }
+                board[x + 1][y].setOpened();
+                board[x][y - 1].setOpened();
+                board[x][y + 1].setOpened();
+                board[x + 1][y + 1].setOpened();
+                board[x + 1][y - 1].setOpened();
             }
             if (x == size - 1 && y > 0 && y < size-1) {
-                for (int i = -1; i < 1; i++) {
-                    for (int j = -1; j < 1; j++) {
-                        board[x+i][y+j].setOpened();
-                    }
-                }
+                board[x - 1][y].setOpened();
+                board[x][y - 1].setOpened();
+                board[x][y + 1].setOpened();
+                board[x - 1][y - 1].setOpened();
+                board[x - 1][y + 1].setOpened();
             }
             if (y == 0 && x > 0 && x < size-1) {
-                for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 2; j++) {
-                        board[x+i][y+j].setOpened();
-                    }
-                }
+                board[x - 1][y].setOpened();
+                board[x + 1][y].setOpened();
+                board[x][y + 1].setOpened();
+                board[x + 1][y + 1].setOpened();
+                board[x - 1][y + 1].setOpened();
             }
             if (y == size - 1 && x > 0 && x < size - 1) {
-                for (int i = -1; i < 1; i++) {
-                    for (int j = -1; j < 1; j++) {
-                        board[x+i][y+j].setOpened();
-                    }
-                }
+                board[x - 1][y].setOpened();
+                board[x + 1][y].setOpened();
+                board[x][y - 1].setOpened();
+                board[x - 1][y - 1].setOpened();
+                board[x + 1][y - 1].setOpened();
             }
         }
     }
@@ -171,7 +147,7 @@ public class Board {
         }
     }
 
-    private void checkForGameEnd() {
+    public void checkForGameEnd() {
         int bombsFlagged = 0;
         int markedTiles = 0;
         boolean gameOver = false;
@@ -219,7 +195,7 @@ public class Board {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                checkForBombs(i, j);
+                setNumBombs(i, j);
                 board[i][j].setCoords(i, j);
                 if (board[i][j] instanceof Mine) {
                     numBombs++;
