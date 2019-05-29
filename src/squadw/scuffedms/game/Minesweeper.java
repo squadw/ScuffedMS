@@ -40,7 +40,7 @@ public class Minesweeper extends JFrame {
     private void initButtons() {
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
-                board.getBoard()[i][j].getButton().addButtonToFrame(this);
+                add(board.getBoard()[i][j].getButton());
             }
         }
     }
