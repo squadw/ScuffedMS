@@ -11,8 +11,10 @@ import java.io.IOException;
 
 public class Minesweeper extends JFrame {
 
-    private JPanel boardPanel = new JPanel();
-    private JPanel content = new JPanel();
+    private JPanel content;
+    private JPanel boardPanel;
+    private JPanel textPanel;
+    private JSplitPane splitPane;
 
     private Board board;
     private int w;
@@ -21,10 +23,8 @@ public class Minesweeper extends JFrame {
     public Minesweeper(int s, int d) {
         board = new Board(s,d);
         w = board.getSize() * 40;
-        h = board.getSize() * 40 + 20;
-        initPanel();
-        initFrame();
-        initButtons();
+        h = board.getSize() * 40;
+        initUI();
         setVisible(true);
         //printBoard();
     }
@@ -49,37 +49,32 @@ public class Minesweeper extends JFrame {
         }
     }
 
-    private void initPanel() {
-        content.setSize(w, h);
-        content.setFocusable(true);
-        content.setFocusTraversalKeysEnabled(false);
-        getContentPane().add(content);
-        initLayout();
+    private void initUI() {
+       splitPane = new JSplitPane();
+
+       boardPanel = new JPanel();
+       textPanel = new JPanel();
+
+       initFrame();
+       getContentPane().setLayout(new GridLayout());
+       getContentPane().add(splitPane);
+
+       splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+       splitPane.setDividerLocation(h/2);
+       splitPane.setTopComponent(boardPanel);
+       splitPane.setBottomComponent(textPanel);
+
+       boardPanel.setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
+       initButtons();
     }
 
     private void initLayout(){
-        LayoutManager layout = new BoxLayout(content, BoxLayout.Y_AXIS);
-        Box[] boxes = new Box[2];
-        boxes[0] = Box.createHorizontalBox();
-        boxes[1] = Box.createHorizontalBox();
 
-        boxes[0].createGlue();
-        boxes[1].createGlue();
-
-        content.add(boxes[0]);
-        content.add(boxes[1]);
-
-        JPanel panel = new JPanel();
-        boardPanel.setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
-        boardPanel.setPreferredSize(new Dimension(w,h * (7/8)));
-        panel.setPreferredSize(new Dimension(w, h * (1/8)));
-
-        boxes[0].add(boardPanel);
-        boxes[1].add(panel);
     }
 
     private void initFrame() {
-        setSize(w, h);
+        //setSize(w, h);
+        setPreferredSize(new Dimension(w, h));
         setFocusable(true);
         setResizable(false);
         setLocationRelativeTo(null);
