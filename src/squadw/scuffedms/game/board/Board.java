@@ -68,26 +68,7 @@ public class Board {
         return numBombsLeft;
     }
 
-    private void checkForBomb(int x, int y) {
-
-        if (board[x][y] instanceof Mine) {
-            int repX = x;
-            int repY = y;
-            for (int i = -1; i < 2; i++) {
-                for (int j = -1; j < 2; j++) {
-                    if (!(board[x + i][y + j] instanceof Mine)) {
-                        repX = x + i;
-                        repY = y + j;
-                    }
-                }
-            }
-            Tile temp = board[repX][repY];
-            board[repX][repY] = board[x][y];
-            board[x][y] = temp;
-        }
-    }
-
-    public void revealBoard(int x, int y) {
+    private void revealBoard(int x, int y) {
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
 
         if (board[x][y].getNumBombs() == 0 && board[x][y].getTileState() != Tile.OPENED && !(board[x][y] instanceof Mine)) {
