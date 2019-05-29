@@ -26,7 +26,7 @@ public class Minesweeper extends JFrame {
         h = board.getSize() * 40;
         initUI();
         setVisible(true);
-        //printBoard();
+        printBoard();
     }
 
     public void printBoard() {
