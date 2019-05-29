@@ -13,6 +13,7 @@ public class Board {
     private int size;
     private int diff;
     private int numBombs;
+    private int firstClick;
     private Tile[][] board;
 
     public Board(int size, int diff) {
@@ -92,6 +93,25 @@ public class Board {
                     }
                 });
             }
+    }
+
+    private void checkForBomb(int x, int y) {
+
+        if (board[x][y] instanceof Mine) {
+            int repX = x;
+            int repY = y;
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if (!(board[x + i][y + j] instanceof Mine)) {
+                        repX = x + i;
+                        repY = y + j;
+                    }
+                }
+            }
+            Tile temp = board[repX][repY];
+            board[repX][repY] = board[x][y];
+            board[x][y] = temp;
+        }
     }
 
     private void revealBoard(int x, int y) {
@@ -190,7 +210,14 @@ public class Board {
             }
         }
 
-        if (bombsFlagged == numBombs && markedTiles == 0) Main.endGame(true);
+        if (bombsFlagged == numBombs && markedTiles == 0) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    if (board[i][j].getTileState() != Tile.MARKED) board[i][j].setOpened();
+                }
+            }
+            Main.endGame(true);
+        }
         else if (gameOver) Main.endGame(false);
     }
   
