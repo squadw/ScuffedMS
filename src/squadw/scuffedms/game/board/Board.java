@@ -32,6 +32,10 @@ public class Board {
         return board;
     }
 
+    public int getTotalBombs() {
+        return numBombs;
+    }
+
     private void checkForBombs(int x, int y) {
         int mines = 0;
         int xMax = x+1;
@@ -66,10 +70,6 @@ public class Board {
                     public void mouseReleased(MouseEvent e) {
                         if (pressed) {
                             revealBoard(t.getCoords()[0], t.getCoords()[1]);
-                            firstClick++;
-                            if (firstClick == 1) {
-                                checkForBomb(t.getCoords()[0], t.getCoords()[1]);
-                            }
 
                             if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t.setClosed();
                             else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
