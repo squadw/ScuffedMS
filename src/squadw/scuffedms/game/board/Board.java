@@ -21,7 +21,6 @@ public class Board {
         this.diff = diff;
         board = new Tile[this.size][this.size];
         initBoard();
-        tileMouseListener();
     }
 
     public int getSize() {
@@ -55,7 +54,7 @@ public class Board {
         board[x][y].setNumBombs(mines);
     }
 
-    private void numBombsLeft() {
+    public int numBombsLeft() {
         int numMarked = 0;
 
         for (Tile[] b: board) {
@@ -65,69 +64,11 @@ public class Board {
                 }
             }
         }
-        numBombsLeft = numMarked;
+        numBombsLeft = numBombs - numMarked;
+        return numBombsLeft;
     }
 
-    private void tileMouseListener() {
-        for (Tile[] b: board)
-            for (Tile t : b) {
-                t.getButton().addMouseListener(new MouseAdapter() {
-                    boolean pressed;
-
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        pressed = true;
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        if (pressed) {
-                            revealBoard(t.getCoords()[0], t.getCoords()[1]);
-
-                            if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t.setClosed();
-                            else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
-                            else if (t.getTileState() != Tile.MARKED) t.setOpened();
-                            if (t.getNumBombs() == 0)
-                                openAround(t.getCoords()[0], t.getCoords()[1]);
-                            checkForGameEnd();
-
-                            pressed = false;
-                        }
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        pressed = false;
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                        pressed = true;
-                    }
-                });
-            }
-    }
-
-    private void checkForBomb(int x, int y) {
-
-        if (board[x][y] instanceof Mine) {
-            int repX = x;
-            int repY = y;
-            for (int i = -1; i < 2; i++) {
-                for (int j = -1; j < 2; j++) {
-                    if (!(board[x + i][y + j] instanceof Mine)) {
-                        repX = x + i;
-                        repY = y + j;
-                    }
-                }
-            }
-            Tile temp = board[repX][repY];
-            board[repX][repY] = board[x][y];
-            board[x][y] = temp;
-        }
-    }
-
-    private void revealBoard(int x, int y) {
+    public void revealBoard(int x, int y) {
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
 
         if (board[x][y].getNumBombs() == 0 && board[x][y].getTileState() != Tile.OPENED && !(board[x][y] instanceof Mine)) {
@@ -147,7 +88,7 @@ public class Board {
         }
     }
 
-    private void openAround(int x, int y) {
+    public void openAround(int x, int y) {
         if (board[x][y].getTileState() == Tile.OPENED && board[x][y].getNumBombs() == 0) {
             if (x > 0 && x < size-1 && y > 0 && y < size-1) {
                 board[x - 1][y].setOpened();
@@ -206,7 +147,7 @@ public class Board {
         }
     }
 
-    private void checkForGameEnd() {
+    public void checkForGameEnd() {
         int bombsFlagged = 0;
         int markedTiles = 0;
         boolean gameOver = false;

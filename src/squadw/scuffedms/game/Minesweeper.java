@@ -7,12 +7,18 @@ import squadw.scuffedms.game.tile.Tile;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class Minesweeper extends JFrame {
 
-    private JPanel boardPanel = new JPanel();
-    private JPanel content = new JPanel();
+    private JPanel content;
+    private JPanel boardPanel;
+    private JPanel textPanel;
+    private JSplitPane splitPane;
+
+    private JLabel bombsLeft;
 
     private Board board;
     private int w;
@@ -20,11 +26,10 @@ public class Minesweeper extends JFrame {
 
     public Minesweeper(int s, int d) {
         board = new Board(s,d);
-        w = board.getSize() * 40;
-        h = board.getSize() * 40 + 20;
-        initPanel();
-        initFrame();
-        initButtons();
+        w = board.getSize() * 40 + 20;
+        h = board.getSize() * 40 + 80;
+        tileMouseListener();
+        initUI();
         setVisible(true);
         printBoard();
     }
@@ -44,42 +49,42 @@ public class Minesweeper extends JFrame {
     private void initButtons() {
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
-                board.getBoard()[i][j].getButton().addButtonToFrame(boardPanel);
+                boardPanel.add(board.getBoard()[i][j].getButton());
             }
         }
     }
 
-    private void initPanel() {
-        content.setSize(w, h);
-        content.setFocusable(true);
-        content.setFocusTraversalKeysEnabled(false);
-        getContentPane().add(content);
-        initLayout();
+    private void initUI() {
+       splitPane = new JSplitPane();
+       boardPanel = new JPanel();
+       textPanel = new JPanel();
+
+       bombsLeft = new JLabel("Bombs Left: " + board.numBombsLeft());
+
+       initFrame();
+       getContentPane().setLayout(new GridLayout());
+       getContentPane().add(splitPane);
+
+       splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+       splitPane.setDividerSize(0);
+       splitPane.setDividerLocation(h - 80);
+       splitPane.setTopComponent(boardPanel);
+       splitPane.setBottomComponent(textPanel);
+
+       textPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+       boardPanel.setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
+
+       textPanel.add(bombsLeft);
+       initButtons();
     }
 
-    private void initLayout(){
-        LayoutManager layout = new BoxLayout(content, BoxLayout.Y_AXIS);
-        Box[] boxes = new Box[2];
-        boxes[0] = Box.createHorizontalBox();
-        boxes[1] = Box.createHorizontalBox();
-
-        boxes[0].createGlue();
-        boxes[1].createGlue();
-
-        content.add(boxes[0]);
-        content.add(boxes[1]);
-
-        JPanel panel = new JPanel();
-        boardPanel.setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
-        boardPanel.setPreferredSize(new Dimension(w,h * (7/8)));
-        panel.setPreferredSize(new Dimension(w, h * (1/8)));
-
-        boxes[0].add(boardPanel);
-        boxes[1].add(panel);
+    private void updateMineLabel() {
+        bombsLeft.setText("Bombs Left: " + board.numBombsLeft());
     }
 
     private void initFrame() {
         setSize(w, h);
+        setPreferredSize(new Dimension(w, h));
         setFocusable(true);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -88,5 +93,51 @@ public class Minesweeper extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         try { setIconImage(ImageIO.read(getClass().getResource("/squadw/scuffedms/resources/images/flag.png"))); }
         catch(IOException e) { System.out.println(e); }
+    }
+
+    private void tileMouseListener() {
+        for (Tile[] b: board.getBoard())
+            for (Tile t : b) {
+                t.getButton().addMouseListener(new MouseAdapter() {
+                    boolean pressed;
+
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        pressed = true;
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        if (pressed) {
+                            if (!SwingUtilities.isRightMouseButton(e))
+                                board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
+                            if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) {
+                                t.setClosed();
+                                updateMineLabel();
+                            }
+                            else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) {
+                                t.setMarked();
+                                updateMineLabel();
+                            }
+                            else if (t.getTileState() != Tile.MARKED) t.setOpened();
+                            if (t.getNumBombs() == 0)
+                                board.openAround(t.getCoords()[0], t.getCoords()[1]);
+                            board.checkForGameEnd();
+
+                            pressed = false;
+                        }
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        pressed = false;
+                    }
+
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        pressed = true;
+                    }
+                });
+            }
     }
 }
