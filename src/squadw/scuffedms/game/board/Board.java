@@ -66,10 +66,6 @@ public class Board {
                     public void mouseReleased(MouseEvent e) {
                         if (pressed) {
                             revealBoard(t.getCoords()[0], t.getCoords()[1]);
-                            firstClick++;
-                            if (firstClick == 1) {
-                                checkForBomb(t.getCoords()[0], t.getCoords()[1]);
-                            }
 
                             if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) t.setClosed();
                             else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) t.setMarked();
@@ -93,25 +89,6 @@ public class Board {
                     }
                 });
             }
-    }
-
-    private void checkForBomb(int x, int y) {
-
-        if (board[x][y] instanceof Mine) {
-            int repX = x;
-            int repY = y;
-            for (int i = -1; i < 2; i++) {
-                for (int j = -1; j < 2; j++) {
-                    if (!(board[x + i][y + j] instanceof Mine)) {
-                        repX = x + i;
-                        repY = y + j;
-                    }
-                }
-            }
-            Tile temp = board[repX][repY];
-            board[repX][repY] = board[x][y];
-            board[x][y] = temp;
-        }
     }
 
     private void revealBoard(int x, int y) {
