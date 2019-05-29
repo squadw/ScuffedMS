@@ -68,7 +68,7 @@ public class Board {
         return numBombsLeft;
     }
 
-    private void revealBoard(int x, int y) {
+    public void revealBoard(int x, int y) {
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
 
         if (board[x][y].getNumBombs() == 0 && board[x][y].getTileState() != Tile.OPENED && !(board[x][y] instanceof Mine)) {
