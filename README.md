@@ -4,11 +4,10 @@ A simple Minesweeper clone written in Java.
 ### Prerequisites
 You need Java 8 or higher
 ### Running
-You can run it from command line for custom size and difficulty
+You can run it from command line for custom size and difficulty. More info [here](../../wiki/Running-with-commandline)
 ```
 java -jar ScuffedMS.jar [size] [difficulty]
 ```
-More info [here](../../wiki/Running-with-commandline)
 ### Latest Release
 You can grab the latest version [here](https://github.com/squadw/ScuffedMS/releases/latest)
 ## Authors
