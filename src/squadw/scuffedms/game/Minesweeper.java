@@ -16,7 +16,6 @@ import java.time.Instant;
 
 public class Minesweeper extends JFrame {
 
-    private JPanel content;
     private JPanel boardPanel;
     private JPanel textPanel;
     private JSplitPane splitPane;
@@ -63,7 +62,6 @@ public class Minesweeper extends JFrame {
             }
         }
     }
-
 
     private void initButtons() {
         for (int i = 0; i < board.getSize(); i++) {
@@ -162,9 +160,26 @@ public class Minesweeper extends JFrame {
     }
 
     public void tryToEnd(Boolean status) {
-        if (status != null) {;
-            Main.endGame(status);
+        if (status != null) {
+            endTimer();
+            endGame(status);
         }
     }
 
+    public void endGame(boolean win) {
+        if (win) {
+            Object[] options = {"OK"};
+            JOptionPane.showOptionDialog(this, "You marked all the bombs!\nTime: " + "\nPress OK to quit.",
+                    "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE,
+                    null, options, options[0]);
+            System.exit(9);
+        }
+        else {
+            Object[] options = {"OK"};
+            JOptionPane.showOptionDialog(this, "You exploded a bomb!\nTime: " + "\nPress OK to quit.",
+                    "You Lose", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE,
+                    null, options, options[0]);
+            System.exit(8);
+        }
+    }
 }

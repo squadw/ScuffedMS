@@ -32,22 +32,4 @@ public class Main {
         else
             game = new Game();
         }
-
-
-    public static void endGame(boolean win) {
-        if (win) {
-            Object[] options = {"OK"};
-            JOptionPane.showOptionDialog(game, "You marked all the bombs!\nTime: " + "\nPress OK to quit.",
-                    "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE,
-                    null, options, options[0]);
-            System.exit(9);
-        }
-        else {
-            Object[] options = {"OK"};
-            JOptionPane.showOptionDialog(game, "You exploded a bomb!\nTime: " + "\nPress OK to quit.",
-                    "You Lose", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE,
-                    null, options, options[0]);
-            System.exit(8);
-        }
-    }
 }
