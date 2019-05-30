@@ -1,12 +1,8 @@
 package squadw.scuffedms.game.board;
 
-import squadw.scuffedms.Main;
 import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
-import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Random;
 
 public class Board {
