@@ -8,6 +8,7 @@ You can run it from command line for custom size and difficulty
 ```
 java -jar ScuffedMS.jar [size] [difficulty]
 ```
+More info [here](../../wiki/Running-with-commandline)
 ### Latest Release
 You can grab the latest version [here](https://github.com/squadw/ScuffedMS/releases/latest)
 ## Authors
