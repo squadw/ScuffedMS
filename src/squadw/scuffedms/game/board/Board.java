@@ -147,7 +147,7 @@ public class Board {
         }
     }
 
-    public void checkForGameEnd() {
+    public Boolean checkForGameEnd() {
         int bombsFlagged = 0;
         int markedTiles = 0;
         boolean gameOver = false;
@@ -170,9 +170,14 @@ public class Board {
                     if (board[i][j].getTileState() != Tile.MARKED) board[i][j].setOpened();
                 }
             }
-            Main.endGame(true);
+            //Main.endGame(true);
+            return true;
         }
-        else if (gameOver) Main.endGame(false);
+        else if (gameOver) {
+            //Main.endGame(false);
+            return false;
+        }
+        return null;
     }
   
     private void revealAllMines() {

@@ -1,5 +1,6 @@
 package squadw.scuffedms.game;
 
+import squadw.scuffedms.Main;
 import squadw.scuffedms.game.board.Board;
 import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
@@ -10,6 +11,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 public class Minesweeper extends JFrame {
 
@@ -19,10 +22,17 @@ public class Minesweeper extends JFrame {
     private JSplitPane splitPane;
 
     private JLabel bombsLeft;
+    private JLabel timePassed;
 
     private Board board;
     private int w;
     private int h;
+
+    private static Instant start;
+    private static Instant end;
+    private static Duration interval;
+    private static long minutes;
+    private static long seconds;
 
     public Minesweeper(int s, int d) {
         board = new Board(s,d);
@@ -31,7 +41,16 @@ public class Minesweeper extends JFrame {
         tileMouseListener();
         initUI();
         setVisible(true);
+        startTimer();
         printBoard();
+    }
+
+    public void startTimer() {
+        start = Instant.now();
+    }
+
+    public void endTimer() {
+        end = Instant.now();
     }
 
     public void printBoard() {
@@ -60,6 +79,7 @@ public class Minesweeper extends JFrame {
        textPanel = new JPanel();
 
        bombsLeft = new JLabel("Bombs Left: " + board.numBombsLeft());
+       timePassed = new JLabel("Time: 0s");
 
        initFrame();
        getContentPane().setLayout(new GridLayout());
@@ -122,7 +142,7 @@ public class Minesweeper extends JFrame {
                             else if (t.getTileState() != Tile.MARKED) t.setOpened();
                             if (t.getNumBombs() == 0)
                                 board.openAround(t.getCoords()[0], t.getCoords()[1]);
-                            board.checkForGameEnd();
+                            tryToEnd(board.checkForGameEnd());
 
                             pressed = false;
                         }
@@ -140,4 +160,11 @@ public class Minesweeper extends JFrame {
                 });
             }
     }
+
+    public void tryToEnd(Boolean status) {
+        if (status != null) {;
+            Main.endGame(status);
+        }
+    }
+
 }

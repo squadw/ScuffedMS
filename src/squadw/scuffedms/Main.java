@@ -8,11 +8,6 @@ import java.time.Instant;
 public class Main {
 
     private static Game game;
-    private static Instant start;
-    private static Instant end;
-    private static Duration interval;
-    private static long minutes;
-    private static long seconds;
 
     public static void main(String[] args) {
         if (args.length == 2) {
@@ -20,7 +15,6 @@ public class Main {
                 int s = Integer.parseInt(args[0]);
                 int d = Integer.parseInt(args[1]);
                 game = new Game(s, d);
-                start = Instant.now();
             }
             catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter an integer for size and diffculty or just size.");
@@ -30,37 +24,27 @@ public class Main {
             try {
                 int s = Integer.parseInt(args[0]);
                 game = new Game(s);
-                start = Instant.now();
             }
             catch (NumberFormatException e) {
                 System.out.println("Invalid input. Please enter an integer for size and difficulty or just size.");
             }
         }
         else
-            start = Instant.now();
             game = new Game();
         }
 
 
     public static void endGame(boolean win) {
         if (win) {
-            end = Instant.now();
-            interval = Duration.between(start, end);
-            minutes = (interval.getSeconds() / 60);
-            seconds = (interval.getSeconds() % 60);
             Object[] options = {"OK"};
-            JOptionPane.showOptionDialog(game, "You marked all the bombs!\nTime: " + minutes + "m" + seconds + "s" + "\nPress OK to quit.",
+            JOptionPane.showOptionDialog(game, "You marked all the bombs!\nTime: " + "\nPress OK to quit.",
                     "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE,
                     null, options, options[0]);
             System.exit(9);
         }
         else {
-            end = Instant.now();
-            interval = Duration.between(start, end);
-            minutes = (interval.getSeconds() / 60);
-            seconds = (interval.getSeconds() % 60);
             Object[] options = {"OK"};
-            JOptionPane.showOptionDialog(game, "You exploded a bomb!\nTime: " + minutes + "m" + seconds + "s" + "\nPress OK to quit.",
+            JOptionPane.showOptionDialog(game, "You exploded a bomb!\nTime: " + "\nPress OK to quit.",
                     "You Lose", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE,
                     null, options, options[0]);
             System.exit(8);
