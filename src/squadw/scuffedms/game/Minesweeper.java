@@ -81,7 +81,7 @@ public class Minesweeper extends JFrame {
        textPanel = new JPanel();
 
        bombsLeft = new JLabel("Bombs Left: " + board.numBombsLeft());
-       timePassed = new JLabel("Time: 0s");
+       timePassed = new JLabel("    Elapsed Time: Waiting for first move");
 
        initFrame();
        getContentPane().setLayout(new GridLayout());
