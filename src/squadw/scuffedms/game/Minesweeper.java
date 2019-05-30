@@ -1,8 +1,6 @@
 package squadw.scuffedms.game;
 
-import squadw.scuffedms.Main;
 import squadw.scuffedms.game.board.Board;
-import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
 import javax.imageio.ImageIO;
@@ -11,8 +9,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Minesweeper extends JFrame {
 
@@ -27,16 +25,15 @@ public class Minesweeper extends JFrame {
     private int w;
     private int h;
 
-    private static Instant start;
-    private static Instant end;
-    private static Duration interval;
-    private static long minutes;
-    private static long seconds;
+    Timer timer;
+    private long minutes;
+    private long seconds;
+    private long overallTime;
 
     public Minesweeper(int s, int d) {
         board = new Board(s,d);
         w = board.getSize() * 40 + 20;
-        h = board.getSize() * 40 + 80;
+        h = board.getSize() * 40 + 70;
         tileMouseListener();
         initUI();
         setVisible(true);
@@ -45,11 +42,17 @@ public class Minesweeper extends JFrame {
     }
 
     public void startTimer() {
-        start = Instant.now();
-    }
-
-    public void endTimer() {
-        end = Instant.now();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                overallTime++;
+                minutes = overallTime / 60;
+                seconds = overallTime % 60;
+                updateTimeLabel();
+            }
+        };
+        timer = new Timer();
+        timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
     public void printBoard() {
@@ -85,7 +88,7 @@ public class Minesweeper extends JFrame {
 
        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
        splitPane.setDividerSize(0);
-       splitPane.setDividerLocation(h - 80);
+       splitPane.setDividerLocation(h - 70);
        splitPane.setTopComponent(boardPanel);
        splitPane.setBottomComponent(textPanel);
 
@@ -93,11 +96,19 @@ public class Minesweeper extends JFrame {
        boardPanel.setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
 
        textPanel.add(bombsLeft);
+       textPanel.add(timePassed);
        initButtons();
     }
 
     private void updateMineLabel() {
         bombsLeft.setText("Bombs Left: " + board.numBombsLeft());
+    }
+
+    private void updateTimeLabel() {
+        if (minutes > 0)
+            timePassed.setText("    Elapsed Time: " + minutes + "m " + seconds + "s");
+        else
+            timePassed.setText("    Elapsed Time: " + seconds + "s");
     }
 
     private void initFrame() {
@@ -161,22 +172,27 @@ public class Minesweeper extends JFrame {
 
     public void tryToEnd(Boolean status) {
         if (status != null) {
-            endTimer();
+            timer.cancel();
             endGame(status);
         }
     }
 
     public void endGame(boolean win) {
+        Object[] options = {"OK"};
+        String timeString;
+        if (minutes > 0)
+            timeString = minutes + "m " + seconds + "s";
+        else
+            timeString = seconds + "s";
+
         if (win) {
-            Object[] options = {"OK"};
-            JOptionPane.showOptionDialog(this, "You marked all the bombs!\nTime: " + "\nPress OK to quit.",
+            JOptionPane.showOptionDialog(this, "You marked all the bombs!\nTime: " + timeString + "\nPress OK to quit.",
                     "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE,
                     null, options, options[0]);
             System.exit(9);
         }
         else {
-            Object[] options = {"OK"};
-            JOptionPane.showOptionDialog(this, "You exploded a bomb!\nTime: " + "\nPress OK to quit.",
+            JOptionPane.showOptionDialog(this, "You exploded a bomb!\nTime: " + timeString + "\nPress OK to quit.",
                     "You Lose", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE,
                     null, options, options[0]);
             System.exit(8);
