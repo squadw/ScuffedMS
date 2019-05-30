@@ -1,10 +1,5 @@
 package squadw.scuffedms;
 
-import javax.swing.*;
-import java.lang.Object;
-import java.time.Duration;
-import java.time.Instant;
-
 public class Main {
 
     private static Game game;
@@ -31,5 +26,9 @@ public class Main {
         }
         else
             game = new Game();
-        }
+    }
+
+    public static void playAgain() {
+        main(new String[]{});
+    }
 }

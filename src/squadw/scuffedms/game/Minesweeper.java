@@ -1,5 +1,6 @@
 package squadw.scuffedms.game;
 
+import squadw.scuffedms.Main;
 import squadw.scuffedms.game.board.Board;
 import squadw.scuffedms.game.tile.Tile;
 
@@ -24,7 +25,7 @@ public class Minesweeper extends JFrame {
     private Board board;
     private int w;
     private int h;
-    private int firstClick = 0;
+    private int numClicks = 0;
 
     private Timer timer;
     private TimerTask task;
@@ -38,12 +39,11 @@ public class Minesweeper extends JFrame {
         h = board.getSize() * 40 + 70;
         tileMouseListener();
         initUI();
-        setVisible(true);
         setupTimer();
-        printBoard();
+        setVisible(true);
     }
 
-    public void setupTimer() {
+    private void setupTimer() {
         task = new TimerTask() {
             @Override
             public void run() {
@@ -56,7 +56,7 @@ public class Minesweeper extends JFrame {
         timer = new Timer();
     }
 
-    public void printBoard() {
+    private void printBoard() {
         Tile[][] temp = board.getBoard();
 
         for (int i = 0; i < board.getSize(); i++) {
@@ -134,13 +134,15 @@ public class Minesweeper extends JFrame {
                     @Override
                     public void mousePressed(MouseEvent e) {
                         pressed = true;
+                        if (t.getTileState() == Tile.CLOSED)
+                            t.setImage(Tile.OPENED);
                     }
 
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         if (pressed) {
-                            firstClick++;
-                            if (firstClick == 1) {
+                            numClicks++;
+                            if (numClicks == 1) {
                                 timer.scheduleAtFixedRate(task, 0, 1000);
                             }
 
@@ -166,6 +168,8 @@ public class Minesweeper extends JFrame {
                     @Override
                     public void mouseExited(MouseEvent e) {
                         pressed = false;
+                        if (t.getTileState() == Tile.CLOSED)
+                            t.setImage(Tile.CLOSED);
                     }
 
                     @Override
@@ -176,32 +180,38 @@ public class Minesweeper extends JFrame {
             }
     }
 
-    public void tryToEnd(Boolean status) {
+    private void tryToEnd(Boolean status) {
         if (status != null) {
             timer.cancel();
             endGame(status);
         }
     }
 
-    public void endGame(boolean win) {
-        Object[] options = {"OK"};
+    private void endGame(boolean win) {
+        Object[] options = {"Quit", "Play Again"};
         String timeString;
+        int p;
         if (minutes > 0)
             timeString = minutes + "m " + seconds + "s";
         else
             timeString = seconds + "s";
 
         if (win) {
-            JOptionPane.showOptionDialog(this, "You marked all the bombs!\nTime: " + timeString + "\nPress OK to quit.",
+            p = JOptionPane.showOptionDialog(this, "You marked all the bombs!\nTime: " + timeString,
                     "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE,
                     null, options, options[0]);
-            System.exit(9);
         }
         else {
-            JOptionPane.showOptionDialog(this, "You exploded a bomb!\nTime: " + timeString + "\nPress OK to quit.",
+            p = JOptionPane.showOptionDialog(this, "You exploded a bomb!\nTime: " + timeString,
                     "You Lose", JOptionPane.PLAIN_MESSAGE, JOptionPane.WARNING_MESSAGE,
                     null, options, options[0]);
-            System.exit(8);
+        }
+        if (p == 1) {
+            setVisible(false);
+            Main.playAgain();
+        }
+        else {
+            System.exit(0);
         }
     }
 }
