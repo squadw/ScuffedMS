@@ -1,10 +1,5 @@
 package squadw.scuffedms;
 
-import javax.swing.*;
-import java.lang.Object;
-import java.time.Duration;
-import java.time.Instant;
-
 public class Main {
 
     private static Game game;
@@ -17,7 +12,7 @@ public class Main {
                 game = new Game(s, d);
             }
             catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter an integer for size and diffculty or just size.");
+                System.out.println("Invalid input. Please enter an integer for size and difficulty or just size.");
             }
         }
         else if (args.length == 1) {
