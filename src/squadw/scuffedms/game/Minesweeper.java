@@ -24,8 +24,10 @@ public class Minesweeper extends JFrame {
     private Board board;
     private int w;
     private int h;
+    private int firstClick = 0;
 
-    Timer timer;
+    private Timer timer;
+    private TimerTask task;
     private long minutes;
     private long seconds;
     private long overallTime;
@@ -37,12 +39,12 @@ public class Minesweeper extends JFrame {
         tileMouseListener();
         initUI();
         setVisible(true);
-        startTimer();
+        setupTimer();
         printBoard();
     }
 
-    public void startTimer() {
-        TimerTask task = new TimerTask() {
+    public void setupTimer() {
+        task = new TimerTask() {
             @Override
             public void run() {
                 overallTime++;
@@ -52,7 +54,6 @@ public class Minesweeper extends JFrame {
             }
         };
         timer = new Timer();
-        timer.scheduleAtFixedRate(task, 0, 1000);
     }
 
     public void printBoard() {
@@ -138,6 +139,11 @@ public class Minesweeper extends JFrame {
                     @Override
                     public void mouseReleased(MouseEvent e) {
                         if (pressed) {
+                            firstClick++;
+                            if (firstClick == 1) {
+                                timer.scheduleAtFixedRate(task, 0, 1000);
+                            }
+
                             if (!SwingUtilities.isRightMouseButton(e))
                                 board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
                             if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) {
