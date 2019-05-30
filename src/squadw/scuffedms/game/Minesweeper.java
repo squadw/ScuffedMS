@@ -19,6 +19,7 @@ public class Minesweeper extends JFrame {
     private JSplitPane splitPane;
 
     private JLabel bombsLeft;
+    private JLabel timePassed;
 
     private Board board;
     private int w;
@@ -60,6 +61,7 @@ public class Minesweeper extends JFrame {
        textPanel = new JPanel();
 
        bombsLeft = new JLabel("Bombs Left: " + board.numBombsLeft());
+       timePassed = new JLabel("Time: 0s");
 
        initFrame();
        getContentPane().setLayout(new GridLayout());
