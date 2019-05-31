@@ -2,6 +2,7 @@ package squadw.scuffedms.game;
 
 import squadw.scuffedms.Main;
 import squadw.scuffedms.game.board.Board;
+import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
 import javax.imageio.ImageIO;
@@ -53,6 +54,12 @@ public class Minesweeper extends JFrame {
         initUI();
         revalidate();
         setupTimer();
+    }
+
+    private void refreshGame() {
+        getContentPane().removeAll();
+        initUI();
+        revalidate();
     }
 
     private void setupTimer() {
@@ -165,6 +172,9 @@ public class Minesweeper extends JFrame {
                             numClicks++;
                             if (numClicks == 1) {
                                 timer.scheduleAtFixedRate(task, 0, 1000);
+                                if (t instanceof Mine) {
+                                    
+                                }
                             }
 
                             if (!SwingUtilities.isRightMouseButton(e))
