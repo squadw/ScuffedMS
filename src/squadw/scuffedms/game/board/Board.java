@@ -33,10 +33,6 @@ public class Board {
         return board;
     }
 
-    public int getTotalBombs() {
-        return numBombs;
-    }
-
     private void setNumBombs(int x, int y) {
         int mines = 0;
         int xMax = x+1;

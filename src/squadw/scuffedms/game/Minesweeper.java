@@ -194,14 +194,16 @@ public class Minesweeper extends JFrame {
                                 t.setMarked();
                                 updateMineLabel();
                             }
-                            else if (countFlags(t.getX(), t.getY()) == t.getNumBombs() && t.getNumBombs() > 0) {
+                            else if (countFlags(t.getX(), t.getY()) == t.getNumBombs() && t.getNumBombs() > 0 && t.getTileState() != Tile.MARKED) {
                                 board.openUnflagged(t.getX(), t.getY());
                             }
                             else if (t.getTileState() != Tile.MARKED) {
                                 t.setOpened();
                             }
-                            if (t.getNumBombs() == 0)
+                            if (t.getNumBombs() == 0) {
                                 board.revealBoard(t.getX(), t.getY());
+                                board.openAround(t.getX(), t.getT());
+                            }
                             tryToEnd(board.checkForGameEnd());
 
                             pressed = false;
