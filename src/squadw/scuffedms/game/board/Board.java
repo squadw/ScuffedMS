@@ -176,19 +176,26 @@ public class Board {
         }
     }
 
-    public void moveBomb(Tile t) {
-        int tileX = t.getCoords()[0];
-        int tileY = t.getCoords()[1];
+    public void firstBomb(Tile t) {
+        final int tileX = t.getX();
+        final int tileY = t.getY();
 
         int pos = 0;
         while(board[0][pos] instanceof Mine) { pos++; }
 
-        board[tileX][tileY].setCoords(0, pos);
-        board[0][pos].setCoords(tileX, tileY);
-
         Tile temp = t;
         board[tileX][tileY] = board[0][pos];
         board[0][pos] = temp;
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                setNumBombs(i, j);
+                board[i][j].setCoords(i, j);
+            }
+        }
+
+        revealBoard(board[tileX][tileY].getX(), board[tileX][tileY].getY());
+        board[tileX][tileY].setOpened();
     }
 
     public Boolean checkForGameEnd() {
