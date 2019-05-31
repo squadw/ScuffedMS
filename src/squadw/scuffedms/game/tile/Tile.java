@@ -12,6 +12,7 @@ public class Tile {
     public static final int MARKED = 2;
     private int tileState;
     private int numBombs;
+    private int numFlags;
     private int x;
     private int y;
     private GButton button = new GButton();
@@ -24,9 +25,13 @@ public class Tile {
         this.numBombs = numBombs;
     }
 
+    public void setNumFlags(int numFlags) { this.numFlags = numFlags; }
+
     public int getNumBombs() {
         return numBombs;
     }
+
+    public int getNumFlags() { return numFlags; }
 
     public void setCoords(int x, int y) {
         this.x = x;

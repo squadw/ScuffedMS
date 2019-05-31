@@ -127,6 +127,33 @@ public class Board {
         }
     }
 
+    public void openUnflagged(int x, int y) {
+        int xMax = x+1;
+        int yMax = y+1;
+        int xMin = x-1;
+        int yMin = y-1;
+
+        if (y == size-1) yMax = size-1;
+        if (x == size-1) xMax = size-1;
+        if (x == 0) xMin = 0;
+        if (y == 0) yMin = 0;
+
+        for (int k = xMin; k <= xMax; k++) {
+            for (int l = yMin; l <= yMax; l++) {
+                if (board[k][l].getTileState() != Tile.MARKED) board[k][l].setOpened();
+                if (board[k][l].getNumBombs() == 0) {
+                    revealBoard(k, l);
+                    for (int i = 0; i < size; i++) {
+                        for (int j = 0; j < size; j++) {
+                            openAround(i, j);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
     private void addNewBomb() {
         Random r = new Random();
         int x = r.nextInt(size);
