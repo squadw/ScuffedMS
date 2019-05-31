@@ -140,7 +140,7 @@ public class Minesweeper extends JFrame {
                 if (t.getTileState() == Tile.CLOSED && !SwingUtilities.isRightMouseButton(e))
                     t.setImage(Tile.OPENED);
             }
-
+          
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (pressed) {
