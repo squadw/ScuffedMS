@@ -48,6 +48,15 @@ public class Tile {
         }
     }
 
+    public void setImage(int i) {
+        if (i == CLOSED)
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
+        else if (i == OPENED)
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
+        else if (i == MARKED)
+            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
+    }
+
     public GButton getButton() {
         return button;
     }

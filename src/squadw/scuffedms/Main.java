@@ -26,5 +26,9 @@ public class Main {
         }
         else
             game = new Game();
-        }
+    }
+
+    public static void playAgain() {
+        main(new String[]{});
+    }
 }
