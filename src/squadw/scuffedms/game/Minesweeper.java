@@ -202,7 +202,7 @@ public class Minesweeper extends JFrame {
                             }
                             if (t.getNumBombs() == 0) {
                                 board.revealBoard(t.getX(), t.getY());
-                                board.openAround(t.getX(), t.getT());
+                                board.openAround(t.getX(), t.getY());
                             }
                             tryToEnd(board.checkForGameEnd());
 
