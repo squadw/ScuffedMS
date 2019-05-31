@@ -2,6 +2,7 @@ package squadw.scuffedms.game;
 
 import squadw.scuffedms.Main;
 import squadw.scuffedms.game.board.Board;
+import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
 import javax.imageio.ImageIO;
@@ -37,10 +38,11 @@ public class Minesweeper extends JFrame {
         board = new Board(s,d);
         w = board.getSize() * 40 + 20;
         h = board.getSize() * 40 + 70;
-        tileMouseListener();
+
         initUI();
         setupTimer();
         setVisible(true);
+        printBoard();
     }
 
     private void restartGame() {
@@ -49,10 +51,17 @@ public class Minesweeper extends JFrame {
 
         int s = board.getSize();
         int d = board.getDiff();
+        numClicks = 0;
         board = new Board(s,d);
         initUI();
         revalidate();
         setupTimer();
+    }
+
+    private void refreshGame() {
+        getContentPane().removeAll();
+        initUI();
+        revalidate();
     }
 
     private void setupTimer() {
@@ -77,9 +86,11 @@ public class Minesweeper extends JFrame {
                 System.out.print(temp[i][j] + " ");
             }
         }
+        System.out.println();
     }
 
     private void initButtons() {
+        tileMouseListener();
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
                 boardPanel.add(board.getBoard()[i][j].getButton());
@@ -149,7 +160,7 @@ public class Minesweeper extends JFrame {
     private void tileMouseListener() {
         for (Tile[] b: board.getBoard())
             for (Tile t : b) {
-                t.getButton().addMouseListener(new MouseAdapter() {
+                MouseAdapter m = new MouseAdapter() {
                     boolean pressed;
 
                     @Override
@@ -165,10 +176,16 @@ public class Minesweeper extends JFrame {
                             numClicks++;
                             if (numClicks == 1) {
                                 timer.scheduleAtFixedRate(task, 0, 1000);
+                                if (board.getBoard()[t.getX()][t.getY()] instanceof Mine) {
+                                    board.firstBomb(board.getBoard()[t.getX()][t.getY()]);
+                                    refreshGame();
+                                    pressed = false;
+                                    return;
+                                }
                             }
 
                             if (!SwingUtilities.isRightMouseButton(e))
-                                board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
+                                board.revealBoard(t.getX(), t.getY());
                             if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) {
                                 t.setClosed();
                                 updateMineLabel();
@@ -177,15 +194,15 @@ public class Minesweeper extends JFrame {
                                 t.setMarked();
                                 updateMineLabel();
                             }
-                            else if (countFlags(t.getCoords()[0], t.getCoords()[1]) == t.getNumBombs() && t.getNumBombs() > 0 && t.getTileState() != Tile.MARKED) {
-                                board.openUnflagged(t.getCoords()[0], t.getCoords()[1]);
+                            else if (countFlags(t.getX(), t.getY()) == t.getNumBombs() && t.getNumBombs() > 0 && t.getTileState() != Tile.MARKED) {
+                                board.openUnflagged(t.getX(), t.getY());
                             }
                             else if (t.getTileState() != Tile.MARKED) {
                                 t.setOpened();
                             }
                             if (t.getNumBombs() == 0) {
-                                board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
-                                board.openAround(t.getCoords()[0], t.getCoords()[1]);
+                                board.revealBoard(t.getX(), t.getY());
+                                board.openAround(t.getX(), t.getT());
                             }
                             tryToEnd(board.checkForGameEnd());
 
@@ -204,7 +221,10 @@ public class Minesweeper extends JFrame {
                     public void mouseEntered(MouseEvent e) {
                         pressed = true;
                     }
-                });
+                };
+
+                if (t.getButton().getMouseListeners().length == 1)
+                    t.getButton().addMouseListener(m);
             }
     }
 
