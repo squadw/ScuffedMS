@@ -56,14 +56,12 @@ public class Minesweeper extends JFrame {
         initUI();
         revalidate();
         setupTimer();
-        printBoard();
     }
 
     private void refreshGame() {
         getContentPane().removeAll();
         initUI();
         revalidate();
-        printBoard();
     }
 
     private void setupTimer() {
@@ -162,7 +160,7 @@ public class Minesweeper extends JFrame {
     private void tileMouseListener() {
         for (Tile[] b: board.getBoard())
             for (Tile t : b) {
-                t.getButton().addMouseListener(new MouseAdapter() {
+                MouseAdapter m = new MouseAdapter() {
                     boolean pressed;
 
                     @Override
@@ -221,7 +219,10 @@ public class Minesweeper extends JFrame {
                     public void mouseEntered(MouseEvent e) {
                         pressed = true;
                     }
-                });
+                };
+
+                if (t.getButton().getMouseListeners().length == 1)
+                    t.getButton().addMouseListener(m);
             }
     }
 
