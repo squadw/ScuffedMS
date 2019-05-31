@@ -23,6 +23,10 @@ public class Board {
         return size;
     }
 
+    public int getDiff() {
+        return diff;
+    }
+
     public Tile[][] getBoard() {
         return board;
     }
