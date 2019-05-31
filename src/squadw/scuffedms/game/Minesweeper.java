@@ -162,8 +162,10 @@ public class Minesweeper extends JFrame {
                             else if (t.getTileState() != Tile.MARKED) {
                                 t.setOpened();
                             }
-                            if (t.getNumBombs() == 0)
+                            if (t.getNumBombs() == 0) {
+                                board.openAround(t.getCoords()[0], t.getCoords()[1]);
                                 board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
+                            }
                             tryToEnd(board.checkForGameEnd());
 
                             pressed = false;
