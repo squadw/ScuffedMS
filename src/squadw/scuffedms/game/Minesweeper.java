@@ -43,6 +43,18 @@ public class Minesweeper extends JFrame {
         setVisible(true);
     }
 
+    private void restartGame() {
+        getContentPane().removeAll();
+        timer.cancel();
+
+        int s = board.getSize();
+        int d = board.getDiff();
+        board = new Board(s,d);
+        initUI();
+        revalidate();
+        setupTimer();
+    }
+
     private void setupTimer() {
         task = new TimerTask() {
             @Override
@@ -76,29 +88,38 @@ public class Minesweeper extends JFrame {
     }
 
     private void initUI() {
-       splitPane = new JSplitPane();
-       boardPanel = new JPanel();
-       textPanel = new JPanel();
+        JButton playAgain = new JButton("Restart");
+        splitPane = new JSplitPane();
+        boardPanel = new JPanel();
+        textPanel = new JPanel();
 
-       bombsLeft = new JLabel("Bombs Left: " + board.numBombsLeft());
-       timePassed = new JLabel("    Elapsed Time: Waiting for first move");
+        bombsLeft = new JLabel("Bombs Left: " + board.numBombsLeft());
+        timePassed = new JLabel("  Elapsed Time: Waiting  ");
 
-       initFrame();
-       getContentPane().setLayout(new GridLayout());
-       getContentPane().add(splitPane);
+        initFrame();
+        getContentPane().setLayout(new GridLayout());
+        getContentPane().add(splitPane);
 
-       splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
-       splitPane.setDividerSize(0);
-       splitPane.setDividerLocation(h - 70);
-       splitPane.setTopComponent(boardPanel);
-       splitPane.setBottomComponent(textPanel);
+        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+        splitPane.setDividerSize(0);
+        splitPane.setDividerLocation(h - 70);
+        splitPane.setTopComponent(boardPanel);
+        splitPane.setBottomComponent(textPanel);
 
-       textPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-       boardPanel.setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
+        textPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        boardPanel.setLayout(new GridLayout(board.getSize(), board.getSize(), 0, 0));
 
-       textPanel.add(bombsLeft);
-       textPanel.add(timePassed);
-       initButtons();
+        playAgain.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                restartGame();
+            }
+        });
+
+        textPanel.add(bombsLeft);
+        textPanel.add(timePassed);
+        textPanel.add(playAgain);
+        initButtons();
     }
 
     private void updateMineLabel() {
@@ -107,9 +128,9 @@ public class Minesweeper extends JFrame {
 
     private void updateTimeLabel() {
         if (minutes > 0)
-            timePassed.setText("    Elapsed Time: " + minutes + "m " + seconds + "s");
+            timePassed.setText("  Elapsed Time: " + minutes + "m " + seconds + "s  ");
         else
-            timePassed.setText("    Elapsed Time: " + seconds + "s");
+            timePassed.setText("  Elapsed Time: " + seconds + "s  ");
     }
 
     private void initFrame() {
