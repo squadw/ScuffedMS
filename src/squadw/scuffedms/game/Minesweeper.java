@@ -156,9 +156,14 @@ public class Minesweeper extends JFrame {
                                 t.setMarked();
                                 updateMineLabel();
                             }
-                            else if (t.getTileState() != Tile.MARKED) t.setOpened();
+                            else if (countFlags(t.getCoords()[0], t.getCoords()[1]) == t.getNumBombs() && t.getNumBombs() > 0) {
+                                board.openUnflagged(t.getCoords()[0], t.getCoords()[1]);
+                            }
+                            else if (t.getTileState() != Tile.MARKED) {
+                                t.setOpened();
+                            }
                             if (t.getNumBombs() == 0)
-                                board.openAround(t.getCoords()[0], t.getCoords()[1]);
+                                board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
                             tryToEnd(board.checkForGameEnd());
 
                             pressed = false;
@@ -178,6 +183,26 @@ public class Minesweeper extends JFrame {
                     }
                 });
             }
+    }
+
+    public int countFlags(int x, int y) {
+        int size = board.getSize();
+        int flags = 0;
+        int xMax = x+1;
+        int yMax = y+1;
+        int xMin = x-1;
+        int yMin = y-1;
+
+        if (y == size-1) yMax = size-1;
+        if (x == size-1) xMax = size-1;
+        if (x == 0) xMin = 0;
+        if (y == 0) yMin = 0;
+
+        for (int k = xMin; k <= xMax; k++)
+            for (int l = yMin; l <= yMax; l++)
+                if (board.getBoard()[k][l].getTileState() == Tile.MARKED) flags++;
+
+        return flags;
     }
 
     private void tryToEnd(Boolean status) {
