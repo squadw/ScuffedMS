@@ -42,6 +42,7 @@ public class Minesweeper extends JFrame {
         initUI();
         setupTimer();
         setVisible(true);
+        printBoard();
     }
 
     private void restartGame() {
@@ -60,6 +61,7 @@ public class Minesweeper extends JFrame {
         getContentPane().removeAll();
         initUI();
         revalidate();
+        printBoard();
     }
 
     private void setupTimer() {
@@ -84,6 +86,7 @@ public class Minesweeper extends JFrame {
                 System.out.print(temp[i][j] + " ");
             }
         }
+        System.out.println();
     }
 
     private void initButtons() {
@@ -172,8 +175,10 @@ public class Minesweeper extends JFrame {
                             numClicks++;
                             if (numClicks == 1) {
                                 timer.scheduleAtFixedRate(task, 0, 1000);
-                                if (t instanceof Mine) {
-                                    
+                                if (board.getBoard()[t.getX()][t.getY()] instanceof Mine) {
+                                    board.moveBomb(board.getBoard()[t.getX()][t.getY()]);
+                                    refreshGame();
+                                    return;
                                 }
                             }
 

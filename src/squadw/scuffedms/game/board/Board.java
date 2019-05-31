@@ -3,6 +3,8 @@ package squadw.scuffedms.game.board;
 import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Board {
@@ -172,6 +174,21 @@ public class Board {
         else {
             board[x][y] = new Mine();
         }
+    }
+
+    public void moveBomb(Tile t) {
+        int tileX = t.getCoords()[0];
+        int tileY = t.getCoords()[1];
+
+        int pos = 0;
+        while(board[0][pos] instanceof Mine) { pos++; }
+
+        board[tileX][tileY].setCoords(0, pos);
+        board[0][pos].setCoords(tileX, tileY);
+
+        Tile temp = t;
+        board[tileX][tileY] = board[0][pos];
+        board[0][pos] = temp;
     }
 
     public Boolean checkForGameEnd() {

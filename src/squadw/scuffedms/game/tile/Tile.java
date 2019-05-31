@@ -42,6 +42,14 @@ public class Tile {
         return new int[] {x, y};
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public void setImage() {
         button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
         if (tileState == OPENED)
