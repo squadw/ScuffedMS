@@ -3,6 +3,8 @@ package squadw.scuffedms.game.board;
 import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Board {
@@ -31,7 +33,7 @@ public class Board {
         return numBombs;
     }
 
-    private void setNumBombs(int x, int y) {
+    public void setNumBombs(int x, int y) {
         int mines = 0;
         int xMax = x+1;
         int yMax = y+1;
@@ -125,6 +127,37 @@ public class Board {
                 board[x + 1][y - 1].setOpened();
             }
         }
+    }
+
+    public int[] moveBomb(Tile t) {
+        int tileX = t.getCoords()[0];
+        int tileY = t.getCoords()[1];
+
+        int n;
+        Random r = new Random();
+        List<int[]> options = new ArrayList<>();
+
+        for (int i = tileX-1; i <= tileX+1; i++) {
+            for (int j = tileY-1; j <= tileY+1; j++) {
+                if (i < 0) i = 0;
+                if (i >= size) i = size-1;
+                if (j < 0) j = 0;
+                if (j >= size) j = size-1;
+
+                if (!(board[i][j] instanceof Mine)) {
+                    options.add(new int[]{i, j});
+                }
+            }
+        }
+
+        if (options.size() > 0) {
+            n = r.nextInt(options.size());
+            Tile temp = t;
+            board[tileX][tileY] = board[options.get(n)[0]][options.get(n)[1]];
+            board[options.get(n)[0]][options.get(n)[1]] = temp;
+            return new int[]{tileX, tileY};
+        }
+        return null;
     }
 
     private void addNewBomb() {

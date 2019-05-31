@@ -2,6 +2,7 @@ package squadw.scuffedms.game;
 
 import squadw.scuffedms.Main;
 import squadw.scuffedms.game.board.Board;
+import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
 import javax.imageio.ImageIO;
@@ -37,10 +38,10 @@ public class Minesweeper extends JFrame {
         board = new Board(s,d);
         w = board.getSize() * 40 + 20;
         h = board.getSize() * 40 + 70;
-        tileMouseListener();
         initUI();
         setupTimer();
         setVisible(true);
+        printBoard();
     }
 
     private void setupTimer() {
@@ -65,11 +66,13 @@ public class Minesweeper extends JFrame {
                 System.out.print(temp[i][j] + " ");
             }
         }
+        System.out.println();
     }
 
     private void initButtons() {
         for (int i = 0; i < board.getSize(); i++) {
             for (int j = 0; j < board.getSize(); j++) {
+                tileMouseListener(i, j);
                 boardPanel.add(board.getBoard()[i][j].getButton());
             }
         }
@@ -125,59 +128,67 @@ public class Minesweeper extends JFrame {
         catch(IOException e) { System.out.println(e); }
     }
 
-    private void tileMouseListener() {
-        for (Tile[] b: board.getBoard())
-            for (Tile t : b) {
-                t.getButton().addMouseListener(new MouseAdapter() {
-                    boolean pressed;
+    private void tileMouseListener(int x, int y) {
+        Tile t = board.getBoard()[x][y];
+        t.getButton().addMouseListener(new MouseAdapter() {
+            boolean pressed;
+            boolean moved;
 
-                    @Override
-                    public void mousePressed(MouseEvent e) {
-                        pressed = true;
-                        if (t.getTileState() == Tile.CLOSED)
-                            t.setImage(Tile.OPENED);
-                    }
+            @Override
+            public void mousePressed(MouseEvent e) {
+                pressed = true;
+                if (t.getTileState() == Tile.CLOSED)
+                    t.setImage(Tile.OPENED);
+            }
 
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        if (pressed) {
-                            numClicks++;
-                            if (numClicks == 1) {
-                                timer.scheduleAtFixedRate(task, 0, 1000);
-                            }
-
-                            if (!SwingUtilities.isRightMouseButton(e))
-                                board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
-                            if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) {
-                                t.setClosed();
-                                updateMineLabel();
-                            }
-                            else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) {
-                                t.setMarked();
-                                updateMineLabel();
-                            }
-                            else if (t.getTileState() != Tile.MARKED) t.setOpened();
-                            if (t.getNumBombs() == 0)
-                                board.openAround(t.getCoords()[0], t.getCoords()[1]);
-                            tryToEnd(board.checkForGameEnd());
-
-                            pressed = false;
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (pressed) {
+                    numClicks++;
+                    if (numClicks == 1) {
+                        timer.scheduleAtFixedRate(task, 0, 1000);
+                        if (t instanceof Mine) {
+                            int xy[] = board.moveBomb(t);
+                            moved = true;
+                            initButtons();
+                            board.setNumBombs(xy[0], xy[1]);
+                            board.getBoard()[xy[0]][xy[1]].setOpened();
+                            printBoard();
+                            return;
                         }
                     }
 
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        pressed = false;
-                        if (t.getTileState() == Tile.CLOSED)
-                            t.setImage(Tile.CLOSED);
+                    if (!SwingUtilities.isRightMouseButton(e))
+                        board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
+                    if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) {
+                        t.setClosed();
+                        updateMineLabel();
                     }
+                    else if (SwingUtilities.isRightMouseButton(e) && t.getTileState() != Tile.OPENED) {
+                        t.setMarked();
+                        updateMineLabel();
+                    }
+                    else if (t.getTileState() != Tile.MARKED && !moved) t.setOpened();
+                    if (t.getNumBombs() == 0)
+                        board.openAround(t.getCoords()[0], t.getCoords()[1]);
+                    tryToEnd(board.checkForGameEnd());
 
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
+                    pressed = false;
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                pressed = false;
+                if (t.getTileState() == Tile.CLOSED)
+                    t.setImage(Tile.CLOSED);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
                         pressed = true;
                     }
-                });
-            }
+        });
     }
 
     private void tryToEnd(Boolean status) {
