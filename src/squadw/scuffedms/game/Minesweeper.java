@@ -48,6 +48,7 @@ public class Minesweeper extends JFrame {
     private void restartGame() {
         getContentPane().removeAll();
         timer.cancel();
+        overallTime = 0;
 
         int s = board.getSize();
         int d = board.getDiff();
