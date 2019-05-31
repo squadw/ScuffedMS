@@ -137,7 +137,7 @@ public class Minesweeper extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 pressed = true;
-                if (t.getTileState() == Tile.CLOSED)
+                if (t.getTileState() == Tile.CLOSED && !SwingUtilities.isRightMouseButton(e))
                     t.setImage(Tile.OPENED);
             }
 
