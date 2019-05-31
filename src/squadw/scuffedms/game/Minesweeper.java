@@ -177,15 +177,15 @@ public class Minesweeper extends JFrame {
                                 t.setMarked();
                                 updateMineLabel();
                             }
-                            else if (countFlags(t.getCoords()[0], t.getCoords()[1]) == t.getNumBombs() && t.getNumBombs() > 0) {
+                            else if (countFlags(t.getCoords()[0], t.getCoords()[1]) == t.getNumBombs() && t.getNumBombs() > 0 && t.getTileState() != Tile.MARKED) {
                                 board.openUnflagged(t.getCoords()[0], t.getCoords()[1]);
                             }
                             else if (t.getTileState() != Tile.MARKED) {
                                 t.setOpened();
                             }
                             if (t.getNumBombs() == 0) {
-                                board.openAround(t.getCoords()[0], t.getCoords()[1]);
                                 board.revealBoard(t.getCoords()[0], t.getCoords()[1]);
+                                board.openAround(t.getCoords()[0], t.getCoords()[1]);
                             }
                             tryToEnd(board.checkForGameEnd());
 
