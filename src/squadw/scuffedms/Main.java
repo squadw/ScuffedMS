@@ -1,10 +1,15 @@
 package squadw.scuffedms;
 
+import squadw.scuffedms.game.util.ScoreFile;
+
 public class Main {
 
     private static Game game;
+    private static ScoreFile file;
 
     public static void main(String[] args) {
+        file = new ScoreFile("scores.ms");
+
         // First if else is just for running custom sizes of the board when running through the command line
         if (args.length == 2) {
             try {
@@ -33,5 +38,9 @@ public class Main {
     // Method for restarting a new game if run
     public static void playAgain() {
         main(new String[]{});
+    }
+
+    public static ScoreFile getFile() {
+        return file;
     }
 }

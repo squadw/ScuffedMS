@@ -1,6 +1,7 @@
 package squadw.scuffedms;
 
 import squadw.scuffedms.game.Minesweeper;
+import squadw.scuffedms.game.util.Convert;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -52,17 +53,39 @@ public class Game extends JFrame {
     private void startScreen() {
         // Creates play button
         JPanel panel = new JPanel();
+        GridBagConstraints c = new GridBagConstraints();
+
+        int sc = Main.getFile().getScore();
+        int m = sc / 60;
+        int s = sc % 60;
+        String score;
+
         JButton p = new JButton("Play");
+        JLabel l = new JLabel();
+
+        score = "High Score: ";
+        if (m > 0)
+            score += m + "m " + s + "s";
+        else
+            score += s + "s";
+
+        l.setText(score);
 
         // Configuring panel
         panel.setLayout(new GridBagLayout());
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.VERTICAL;
+        c.insets = new Insets(5,0,5,0);
+
         setContentPane(panel);
 
         // Configuring and adding play button to panel
         p.setAlignmentX(Component.CENTER_ALIGNMENT);
         p.setAlignmentY(Component.CENTER_ALIGNMENT);
         p.setPreferredSize(new Dimension(150,65));
-        panel.add(p);
+        panel.add(l, c);
+        panel.add(p, c);
 
         // Adding listener to play button so it knows when to start the game
         p.addMouseListener(new MouseAdapter() {
