@@ -4,6 +4,7 @@ import squadw.scuffedms.Main;
 import squadw.scuffedms.game.board.Board;
 import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
+import squadw.scuffedms.game.util.ScoreFile;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,9 +31,9 @@ public class Minesweeper extends JFrame {
 
     private Timer timer;
     private TimerTask task;
-    private long minutes;
-    private long seconds;
-    private long overallTime;
+    private int minutes;
+    private int seconds;
+    private int overallTime;
 
     public Minesweeper(int s, int d) {
         board = new Board(s,d);
@@ -266,6 +267,9 @@ public class Minesweeper extends JFrame {
             timeString = seconds + "s";
 
         if (win) {
+            if (overallTime > Main.getFile().getScore()) {
+                Main.getFile().setScore(overallTime);
+            }
             p = JOptionPane.showOptionDialog(this, "You marked all the bombs!\nTime: " + timeString,
                     "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE,
                     null, options, options[0]);
