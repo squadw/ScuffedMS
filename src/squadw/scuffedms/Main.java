@@ -1,10 +1,15 @@
 package squadw.scuffedms;
 
+import squadw.scuffedms.game.util.ScoreFile;
+
 public class Main {
 
     private static Game game;
+    private static ScoreFile file;
 
     public static void main(String[] args) {
+        file = new ScoreFile("scores.ms");
+
         if (args.length == 2) {
             try {
                 int s = Integer.parseInt(args[0]);
@@ -30,5 +35,9 @@ public class Main {
 
     public static void playAgain() {
         main(new String[]{});
+    }
+
+    public static ScoreFile getFile() {
+        return file;
     }
 }
