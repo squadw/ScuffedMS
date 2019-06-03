@@ -5,6 +5,7 @@ public class Main {
     private static Game game;
 
     public static void main(String[] args) {
+        // First if else is just for running custom sizes of the board when running through the command line
         if (args.length == 2) {
             try {
                 int s = Integer.parseInt(args[0]);
@@ -24,10 +25,12 @@ public class Main {
                 System.out.println("Invalid input. Please enter an integer for size and difficulty or just size.");
             }
         }
+        // Creates board
         else
             game = new Game();
     }
 
+    // Method for restarting a new game if run
     public static void playAgain() {
         main(new String[]{});
     }
