@@ -50,6 +50,7 @@ public class Tile {
         return y;
     }
 
+    // Used to change what each tile displays depending on its state.
     public void setImage() {
         button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
         if (tileState == OPENED)
@@ -61,6 +62,7 @@ public class Tile {
         }
     }
 
+    // Used to change what each tile displays depending on its state.
     public void setImage(int i) {
         if (i == CLOSED)
             button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));

@@ -21,6 +21,7 @@ public class Mine extends Tile {
         exploded = true;
     }
 
+    // Used to change what each mine displays depending on its state.
     @Override
     public void setImage() {
         getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));

@@ -14,6 +14,7 @@ public class Board {
     private int numBombsLeft;
     private Tile[][] board;
 
+    // Constructor for board.
     public Board(int size, int diff) {
         this.size = size;
         this.diff = diff;
@@ -33,6 +34,7 @@ public class Board {
         return board;
     }
 
+    // Sets each tile's number to the number of bombs surrounding it
     private void setNumBombs(int x, int y) {
         int mines = 0;
         int xMax = x+1;
@@ -52,6 +54,9 @@ public class Board {
         board[x][y].setNumBombs(mines);
     }
 
+//     Counts number of bombs left.
+//     (Actually counts amount of flags placed which should equal the number of bombs if the game is solved correctly.,
+//     Can be negative if player plays incorrectly and flags tiles that aren't bombs)
     public int numBombsLeft() {
         int numMarked = 0;
 
@@ -66,9 +71,12 @@ public class Board {
         return numBombsLeft;
     }
 
+    // Method to clear an open space when a tile that is blank is opened.
     public void revealBoard(int x, int y) {
+        // Makes sure the tile's position will work and won't break the program.
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
 
+        // Opens all blank tiles within a space surrounded by bombs.
         if (board[x][y].getNumBombs() == 0 && board[x][y].getTileState() != Tile.OPENED && !(board[x][y] instanceof Mine)) {
             board[x][y].setOpened();
             revealBoard(x+1, y);
@@ -79,6 +87,7 @@ public class Board {
         }
         else return;
 
+        // Opens tiles on the perimeter of the opened space.
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 openAround(i, j);
@@ -86,8 +95,13 @@ public class Board {
         }
     }
 
+    // Opens tiles surrounding a tile when clicked if the number of surrounding bombs is 0.
     public void openAround(int x, int y) {
+
+        // Makes sure that the tile is opened and has no surrounding bombs
         if (board[x][y].getTileState() == Tile.OPENED && board[x][y].getNumBombs() == 0) {
+
+            // Each if statement here checks the tiles position so that if its on an edge it doesn't try to open a tile that doesn't exist.
             if (x > 0 && x < size-1 && y > 0 && y < size-1) {
                 board[x - 1][y].setOpened();
                 board[x + 1][y].setOpened();
@@ -129,6 +143,7 @@ public class Board {
         }
     }
 
+    // Method used to open all tiles around a tile that aren't flagged
     public void openUnflagged(int x, int y) {
         int xMax = x+1;
         int yMax = y+1;
@@ -142,20 +157,14 @@ public class Board {
 
         for (int k = xMin; k <= xMax; k++) {
             for (int l = yMin; l <= yMax; l++) {
+                if (board[k][l].getNumBombs() == 0) revealBoard(k, l);
                 if (board[k][l].getTileState() != Tile.MARKED) board[k][l].setOpened();
-                if (board[k][l].getNumBombs() == 0) {
-                    revealBoard(k, l);
-                    for (int i = 0; i < size; i++) {
-                        for (int j = 0; j < size; j++) {
-                            openAround(i, j);
-                        }
-                    }
-                }
             }
         }
 
     }
 
+    // Adds a bomb to a random spot on the board. Runs until a bomb is placed on a spot that a bomb isn't already on
     private void addNewBomb() {
         Random r = new Random();
         int x = r.nextInt(size);
@@ -172,17 +181,22 @@ public class Board {
         }
     }
 
+    // Runs if the first click of a game is a bomb. Replaces the bomb with a tile and moves the bomb to the farthest left position in the top row as possible.
     public void firstBomb(Tile t) {
+        // Gets the first tile clicked position
         final int tileX = t.getX();
         final int tileY = t.getY();
 
+        // Finds the farthest left open space in the top row
         int pos = 0;
         while(board[0][pos] instanceof Mine) { pos++; }
 
+        // Creates a temporary tile to replace the first clicked bomb with a tile and the position found earlier with a bomb.
         Tile temp = t;
         board[tileX][tileY] = board[0][pos];
         board[0][pos] = temp;
 
+        // Resets tiles' surrounding bomb count and their coords so that the tiles still work correctly
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 setNumBombs(i, j);
@@ -190,49 +204,57 @@ public class Board {
             }
         }
 
+        // Tries to run revealBoard and opens the tile that was first clicked
         revealBoard(board[tileX][tileY].getX(), board[tileX][tileY].getY());
         board[tileX][tileY].setOpened();
     }
 
+    // Find the status of the game
     public Boolean checkForGameEnd() {
         int bombsFlagged = 0;
         int markedTiles = 0;
         boolean gameOver = false;
 
+        // Runs through the tiles of the board
         for (Tile[] b : board) {
             for (Tile t : b) {
                 if (t instanceof Mine && ((Mine) t).isExploded()) {
+                    // Checks for a mine that is exploded to end the game
                     gameOver = true;
                     revealAllMines();
                 }
+                // Checks for Mines that are correctly marked and counts them
                 if (t instanceof Mine && t.getTileState() == Tile.MARKED) bombsFlagged++;
+                // Checks for Tiles that are incorrectly marked and counts them
                 if (!(t instanceof Mine) && t.getTileState() == Tile.MARKED) markedTiles++;
                 t.setImage();
             }
         }
 
+        // If else sequence, returns true for win, false for loss, null for neither
+        // If all Mines are marked and there are no extra flags on safe tiles, all the unmarked mines are opened.
         if (bombsFlagged == numBombs && markedTiles == 0) {
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                     if (board[i][j].getTileState() != Tile.MARKED) board[i][j].setOpened();
                 }
             }
-            //Main.endGame(true);
             return true;
         }
         else if (gameOver) {
-            //Main.endGame(false);
             return false;
         }
         return null;
     }
-  
+
+    // Opens all the tiles on the board.
     private void revealAllMines() {
         for (Tile[] b: board)
             for (Tile t : b)
                 if (t instanceof Mine) t.setOpened();
     }
-  
+
+    // Adds an amount of bombs based on the difficulty selected.
     private void initBoard() {
         int n = (size * size) * diff / 20;
 
