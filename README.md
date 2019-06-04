@@ -19,3 +19,5 @@ You can grab the latest version [here](https://github.com/squadw/ScuffedMS/relea
 ## Authors
 * **Austin Leuenhagen** - *Main functionality & UI* - [Lui798](https://github.com/Lui798)
 * **Ethan Hancock** - *Finding new features & testing* - [ETRulz](https://github.com/ETRulz)
+### Flow Chart
+![Flow Chart](https://cdn.discordapp.com/attachments/543523807231475717/585593310903795712/SquadW_Scuffed_Tetris_Flowchart.jpeg)
