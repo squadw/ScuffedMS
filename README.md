@@ -1,6 +1,12 @@
 # ScuffedMS
 A simple Minesweeper clone written in Java. 
 ## Getting Started
+### Playing
+The game offers 3 different sizes and 3 different difficulties. You can also use custom sizes and difficulties. *See [running](#Running)*
+#### Sizes
+* Small: 9x9
+* Medium: 16x16
+* Large: 25x25
 ### Prerequisites
 You need Java 8 or higher
 ### Running
