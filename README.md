@@ -4,9 +4,9 @@ A simple Minesweeper clone written in Java.
 ### Playing
 The game offers 3 different sizes and 3 different difficulties. You can also use custom sizes and difficulties. *See [running](#Running)*
 #### Sizes
-* Small: 9
-* Medium: 16
-* Large: 25
+* Small: 9x9
+* Medium: 16x16
+* Large: 25x25
 #### Difficulties
 * Easy: 2
 * Normal: 3
