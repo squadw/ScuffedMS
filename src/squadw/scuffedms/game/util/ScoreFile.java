@@ -1,6 +1,7 @@
 package squadw.scuffedms.game.util;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class ScoreFile extends File {
     }
 
     private void addScore(int input, int index) {
-        List<String> lines = readFile();
+        List<String> lines = new ArrayList<>();
         lines.set(index, parseInt(input));
         writeFile(lines);
     }
