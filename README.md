@@ -7,10 +7,6 @@ The game offers 3 different sizes and 3 different difficulties. You can also use
 * Small: 9x9
 * Medium: 16x16
 * Large: 25x25
-#### Difficulties
-* Easy: 2
-* Normal: 3
-* Hard: 4
 ### Prerequisites
 You need Java 8 or higher
 ### Running
