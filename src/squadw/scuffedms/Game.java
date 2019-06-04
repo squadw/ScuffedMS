@@ -55,21 +55,21 @@ public class Game extends JFrame {
         JPanel panel = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
 
-        int sc = Main.getFile().getScore();
-        int m = sc / 60;
-        int s = sc % 60;
-        String score;
+//        int sc = Main.getFile().getScore();
+//        int m = sc / 60;
+//        int s = sc % 60;
+//        String score;
 
         JButton p = new JButton("Play");
-        JLabel l = new JLabel();
-
-        score = "High Score: ";
-        if (m > 0)
-            score += m + "m " + s + "s";
-        else
-            score += s + "s";
-
-        l.setText(score);
+//        JLabel l = new JLabel();
+//
+//        score = "High Score: ";
+//        if (m > 0)
+//            score += m + "m " + s + "s";
+//        else
+//            score += s + "s";
+//
+//        l.setText(score);
 
         // Configuring panel
         panel.setLayout(new GridBagLayout());
@@ -84,7 +84,7 @@ public class Game extends JFrame {
         p.setAlignmentX(Component.CENTER_ALIGNMENT);
         p.setAlignmentY(Component.CENTER_ALIGNMENT);
         p.setPreferredSize(new Dimension(150,65));
-        panel.add(l, c);
+        //panel.add(l, c);
         panel.add(p, c);
 
         // Adding listener to play button so it knows when to start the game

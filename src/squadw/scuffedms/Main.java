@@ -8,7 +8,7 @@ public class Main {
     private static ScoreFile file;
 
     public static void main(String[] args) {
-        file = new ScoreFile("scores.ms");
+        //file = new ScoreFile("scores.ms");
 
         // First if else is just for running custom sizes of the board when running through the command line
         if (args.length == 2) {

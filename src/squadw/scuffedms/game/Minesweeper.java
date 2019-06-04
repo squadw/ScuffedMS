@@ -312,9 +312,9 @@ public class Minesweeper extends JFrame {
 
         // If the game is a win, dialog box is shown telling the player they won and displaying how long it took. Option to play again is allowed
         if (win) {
-            if (overallTime > Main.getFile().getScore()) {
+            /*if (overallTime > Main.getFile().getScore()) {
                 Main.getFile().setScore(overallTime);
-            }
+            }*/
             p = JOptionPane.showOptionDialog(this, "You marked all the bombs!\nTime: " + timeString,
                     "You Win", JOptionPane.PLAIN_MESSAGE, JOptionPane.INFORMATION_MESSAGE,
                     null, options, options[0]);
