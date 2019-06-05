@@ -188,7 +188,7 @@ public class Minesweeper extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // Sets the window's icon to the image of a flag
-        try { setIconImage(ImageIO.read(getClass().getResource("/squadw/scuffedms/resources/images/flag.png"))); }
+        try { setIconImage(ImageIO.read(getClass().getResource("/squadw/scuffedms/resources/images/new/flag.png"))); }
         catch(IOException e) { System.out.println(e); }
     }
 

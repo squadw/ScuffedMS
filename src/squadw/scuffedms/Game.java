@@ -45,7 +45,7 @@ public class Game extends JFrame {
         // Changes UI to Windows Default UI
         try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
         catch (Exception e) { System.out.println(e); }
-        try { setIconImage(ImageIO.read(getClass().getResource("/squadw/scuffedms/resources/images/flag.png"))); }
+        try { setIconImage(ImageIO.read(getClass().getResource("/squadw/scuffedms/resources/images/new/flag.png"))); }
         catch(IOException e) { System.out.println(e); }
     }
 
