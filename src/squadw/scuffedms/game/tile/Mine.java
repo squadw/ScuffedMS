@@ -27,9 +27,10 @@ public class Mine extends Tile {
         getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/new/tile.png")));
         if (exploded)
             getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/new/bomb.png")));
-        else if (getTileState() == MARKED) {
+        else if (getTileState() == MARKED)
             getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/new/flag.png")));
-        }
+        else if (getTileState() == GUESSED)
+            getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/new/guess.png")));
     }
 
     @Override

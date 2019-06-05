@@ -50,7 +50,7 @@ public class Minesweeper extends JFrame {
         // Sets the window to be visible to the user
         setVisible(true);
         // Prints the mines location for testing. Will be removed in releases.
-        printBoard();
+        //printBoard();
     }
 
     // Method to restart the game
@@ -227,8 +227,13 @@ public class Minesweeper extends JFrame {
                             if (!SwingUtilities.isRightMouseButton(e))
                                 board.revealBoard(t.getX(), t.getY());
                             // If tile is marked and you right click it unmarks it
-                            if (t.getTileState() == Tile.MARKED && SwingUtilities.isRightMouseButton(e)) {
-                                t.setClosed();
+                            if (SwingUtilities.isRightMouseButton(e)) {
+                                if (t.getTileState() == Tile.MARKED)
+                                    t.setGuessed();
+                                else if (t.getTileState() == Tile.GUESSED)
+                                    t.setClosed();
+                                else if (t.getTileState() == Tile.CLOSED)
+                                    t.setMarked();
                                 updateMineLabel();
                             }
                             // If tile isn't marked and you right click it, it is marked
