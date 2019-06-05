@@ -24,11 +24,11 @@ public class Mine extends Tile {
     // Used to change what each mine displays depending on its state.
     @Override
     public void setImage() {
-        getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
+        getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/new/tile.png")));
         if (exploded)
-            getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/bomb.png")));
+            getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/new/bomb.png")));
         else if (getTileState() == MARKED) {
-            getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
+            getButton().setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/new/flag.png")));
         }
     }
 

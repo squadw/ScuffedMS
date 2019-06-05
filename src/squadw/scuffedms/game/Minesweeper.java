@@ -40,8 +40,8 @@ public class Minesweeper extends JFrame {
 
         // Creates board and sets the width and height to be used later for window configuring
         board = new Board(s,d);
-        w = board.getSize() * 40 + 20;
-        h = board.getSize() * 40 + 70;
+        w = board.getSize() * 32 + 20;
+        h = board.getSize() * 32 + 70;
 
         // Creates the games User Interface
         initUI();

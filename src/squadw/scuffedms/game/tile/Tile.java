@@ -16,6 +16,7 @@ public class Tile {
     private int x;
     private int y;
     private GButton button = new GButton();
+    private String resourcePath = "/squadw/scuffedms/resources/images/new/";
 
     public Tile() {
         setClosed();
@@ -52,24 +53,24 @@ public class Tile {
 
     // Used to change what each tile displays depending on its state.
     public void setImage() {
-        button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
+        button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "tile.png")));
         if (tileState == OPENED)
-            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
+            button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "flat.png")));
         else if (tileState == MARKED)
-            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
+            button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "flag.png")));
         if (tileState == OPENED && numBombs != 0) {
-            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/" + numBombs + ".png")));
+            button.setIcon(new ImageIcon(getClass().getResource(resourcePath + numBombs + ".png")));
         }
     }
 
     // Used to change what each tile displays depending on its state.
     public void setImage(int i) {
         if (i == CLOSED)
-            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/tile.png")));
+            button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "tile.png")));
         else if (i == OPENED)
-            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flat.png")));
+            button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "flat.png")));
         else if (i == MARKED)
-            button.setIcon(new ImageIcon(getClass().getResource("/squadw/scuffedms/resources/images/flag.png")));
+            button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "flag.png")));
     }
 
     public GButton getButton() {
