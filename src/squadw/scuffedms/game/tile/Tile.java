@@ -10,6 +10,7 @@ public class Tile {
     public static final int CLOSED = 0;
     public static final int OPENED = 1;
     public static final int MARKED = 2;
+    public static final int GUESSED = 3;
     private int tileState;
     private int numBombs;
     private int numFlags;
@@ -58,6 +59,8 @@ public class Tile {
             button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "flat.png")));
         else if (tileState == MARKED)
             button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "flag.png")));
+        else if (tileState == GUESSED)
+            button.setIcon(new ImageIcon(getClass().getResource(resourcePath + "guess.png")));
         if (tileState == OPENED && numBombs != 0) {
             button.setIcon(new ImageIcon(getClass().getResource(resourcePath + numBombs + ".png")));
         }
@@ -89,6 +92,11 @@ public class Tile {
 
     public void setMarked() {
         setTileState(MARKED);
+        setImage();
+    }
+
+    public void setGuessed() {
+        setTileState(GUESSED);
         setImage();
     }
 
