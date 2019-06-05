@@ -3,9 +3,7 @@ package squadw.scuffedms.game.board;
 import squadw.scuffedms.game.tile.Mine;
 import squadw.scuffedms.game.tile.Tile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Board {
     private int size;
@@ -75,17 +73,36 @@ public class Board {
     public void revealBoard(int x, int y) {
         // Makes sure the tile's position will work and won't break the program.
         if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
+        if (board[x][y].getNumBombs() != 0 || board[x][y].getTileState() == Tile.OPENED || board[x][y] instanceof Mine) return;
 
         // Opens all blank tiles within a space surrounded by bombs.
-        if (board[x][y].getNumBombs() == 0 && board[x][y].getTileState() != Tile.OPENED && !(board[x][y] instanceof Mine)) {
-            board[x][y].setOpened();
-            revealBoard(x+1, y);
-            revealBoard(x-1, y);
-            revealBoard(x, y-1);
-            revealBoard(x, y+1);
-            //openAround(x, y);
+        Queue queue = new ArrayDeque();
+        queue.add(new int[]{x, y});
+        while (!queue.isEmpty()) {
+            int[] q = (int[])queue.poll();
+            x = q[0];
+            y = q[1];
+            if (x-1 >= 0)
+                if (board[x-1][y].getNumBombs() == 0 && board[x-1][y].getTileState() != Tile.OPENED && !(board[x-1][y] instanceof Mine)) {
+                    board[x-1][y].setOpened();
+                    queue.add(new int[]{x-1, y});
+                }
+            if (x+1 < size)
+                if (board[x+1][y].getNumBombs() == 0 && board[x+1][y].getTileState() != Tile.OPENED && !(board[x+1][y] instanceof Mine)) {
+                    board[x+1][y].setOpened();
+                    queue.add(new int[]{x+1, y});
+                }
+            if (y+1 < size)
+                if (board[x][y+1].getNumBombs() == 0 && board[x][y+1].getTileState() != Tile.OPENED && !(board[x][y+1] instanceof Mine)) {
+                    board[x][y+1].setOpened();
+                    queue.add(new int[]{x, y+1});
+                }
+            if (y-1 >= 0)
+                if (board[x][y-1].getNumBombs() == 0 && board[x][y-1].getTileState() != Tile.OPENED && !(board[x][y-1] instanceof Mine)) {
+                    board[x][y-1].setOpened();
+                    queue.add(new int[]{x, y-1});
+                }
         }
-        else return;
 
         // Opens tiles on the perimeter of the opened space.
         for (int i = 0; i < size; i++) {
