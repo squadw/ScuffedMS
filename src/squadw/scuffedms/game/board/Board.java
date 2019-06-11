@@ -72,7 +72,7 @@ public class Board {
     // Method to clear an open space when a tile that is blank is opened.
     public void revealBoard(int x, int y) {
         // Makes sure the tile's position will work and won't break the program.
-        if (x < 0 || x > size-1 || y < 0 || y > size-1) return;
+        if (x < 0 || x >= size || y < 0 || y >= size) return;
         if (board[x][y].getNumBombs() != 0 || board[x][y].getTileState() == Tile.OPENED || board[x][y] instanceof Mine) return;
 
         // Opens all blank tiles within a space surrounded by bombs.
@@ -114,63 +114,28 @@ public class Board {
 
     // Opens tiles surrounding a tile when clicked if the number of surrounding bombs is 0.
     public void openAround(int x, int y) {
+        int xMin = (x-1 < 0) ? x : x-1;
+        int yMin = (y-1 < 0) ? y : y-1;
+        int xMax = (x+1 >= size) ? x : x+1;
+        int yMax = (y+1 >= size) ? y : y+1;
 
         // Makes sure that the tile is opened and has no surrounding bombs
         if (board[x][y].getTileState() == Tile.OPENED && board[x][y].getNumBombs() == 0) {
-
-            // Each if statement here checks the tiles position so that if its on an edge it doesn't try to open a tile that doesn't exist.
-            if (x > 0 && x < size-1 && y > 0 && y < size-1) {
-                board[x - 1][y].setOpened();
-                board[x + 1][y].setOpened();
-                board[x][y - 1].setOpened();
-                board[x][y + 1].setOpened();
-                board[x - 1][y - 1].setOpened();
-                board[x + 1][y + 1].setOpened();
-                board[x - 1][y + 1].setOpened();
-                board[x + 1][y - 1].setOpened();
-            }
-            if (x == 0 && y > 0 && y < size-1) {
-                board[x + 1][y].setOpened();
-                board[x][y - 1].setOpened();
-                board[x][y + 1].setOpened();
-                board[x + 1][y + 1].setOpened();
-                board[x + 1][y - 1].setOpened();
-            }
-            if (x == size - 1 && y > 0 && y < size-1) {
-                board[x - 1][y].setOpened();
-                board[x][y - 1].setOpened();
-                board[x][y + 1].setOpened();
-                board[x - 1][y - 1].setOpened();
-                board[x - 1][y + 1].setOpened();
-            }
-            if (y == 0 && x > 0 && x < size-1) {
-                board[x - 1][y].setOpened();
-                board[x + 1][y].setOpened();
-                board[x][y + 1].setOpened();
-                board[x + 1][y + 1].setOpened();
-                board[x - 1][y + 1].setOpened();
-            }
-            if (y == size - 1 && x > 0 && x < size - 1) {
-                board[x - 1][y].setOpened();
-                board[x + 1][y].setOpened();
-                board[x][y - 1].setOpened();
-                board[x - 1][y - 1].setOpened();
-                board[x + 1][y - 1].setOpened();
-            }
+            for (int i = xMin; i <= xMax; i++)
+                for (int j = yMin; j <= yMax; j++) {
+                    board[i][j].setOpened();
+                    if (board[i][j].getNumBombs() == 0)
+                        revealBoard(i, j);
+                }
         }
     }
 
     // Method used to open all tiles around a tile that aren't flagged
     public void openUnflagged(int x, int y) {
-        int xMax = x+1;
-        int yMax = y+1;
-        int xMin = x-1;
-        int yMin = y-1;
-
-        if (y == size-1) yMax = size-1;
-        if (x == size-1) xMax = size-1;
-        if (x == 0) xMin = 0;
-        if (y == 0) yMin = 0;
+        int xMin = (x-1 < 0) ? x : x-1;
+        int yMin = (y-1 < 0) ? y : y-1;
+        int xMax = (x+1 >= size) ? x : x+1;
+        int yMax = (y+1 >= size) ? y : y+1;
 
         for (int k = xMin; k <= xMax; k++) {
             for (int l = yMin; l <= yMax; l++) {
